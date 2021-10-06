@@ -1,0 +1,56 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %} {{ title }} :: {{ block.super }} {% endblock %}
+
+
+
+{% block content %}
+<body>
+<div class="featured-page">
+  <div class="container">
+    <div class="row">
+      <div class="col-md-4 col-sm-12">
+        <div class="section-heading">
+          <div class="line-dec"></div>
+          <h1>Featured Items</h1>
+        </div>
+      </div>
+      <div class="col-md-8 col-sm-12">
+        <form action="" method="GET">
+          <div id="filters" class="button-group">
+            {% csrf_token %}
+
+            <button class="btn btn-primary" name="all" >All Products</button>
+            <button class="btn btn-primary" name="new">Newest</button>
+            <button class="btn btn-primary" name="low">Low Price</button>
+            <button class="btn btn-primary" name="high">Hight Price</button>
+        </form>
+      </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="featured container no-gutter">
+  <div class="row posts">
+    {% for post in posts %}
+    <div id="1" class="item new col-md-4">
+      <a href="single-product.html">
+        <div class="featured-item">
+          {% if post.photo %}
+          <img src="{{ post.photo.url }}" width=248 height=188 alt="{{ post.title }}
+" >
+          {% else %}
+          <img src="https://picsum.photos/id/237/300/201" width=248 height=188 alt="{{ post.title }}" >
+          {% endif %}
+          <h4>{{ post.name }}</h4>
+          <h6>{{ post.price }}</h6>
+        </div>
+      </a>
+    </div>
+    {% endfor %}
+  </div>
+</div>
+{% include 'inc/_pagination.html' %}
+{% endblock %}

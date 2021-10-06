@@ -1,0 +1,30 @@
+<div class="featured-items">
+    <div class="container">
+        <div class="row">
+            <div class="col-md-12">
+                <div class="section-heading">
+                    <div class="line-dec"></div>
+                    <h1>{% block title %}{% endblock %}</h1>
+                </div>
+            </div>
+
+            <div class="col-md-12">
+                <div class="owl-carousel owl-theme">
+                    {% for post in posts %}
+                    <a href="">
+                        <div class="featured-item">
+                            {% if post.photo %}
+                            <img src="{{ post.photo.url }}" alt="{{ post.title }}" >
+                            {% else %}
+                            <img src="https://picsum.photos/id/237/300/201" alt="{{ post.title }}" >
+                            {% endif %}
+                            <h4>{{ post.name }}</h4>
+                            <h6>{{ post.price }}</h6>
+                        </div>
+                    {% endfor %}
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
