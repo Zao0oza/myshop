@@ -8,6 +8,6 @@ urlpatterns=[
     path('products/', ProductsPage.as_view(), name='products'),
     path('<slug>/', AboutPage.as_view(), name='about'),
     path('contact/', ContactPage.as_view(), name='contact'),
-    path('feedback/', feedback, name='feedback'),
+    path('products/<str:slug>/', GetProduct.as_view(), name='product'),
 
 ]

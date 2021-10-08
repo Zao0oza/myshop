@@ -5,6 +5,10 @@ from .models import *
 from django import forms
 
 
+class ImageInline(admin.TabularInline):
+    model = ImagesInline
+
+
 class GoodsAdminForm(forms.ModelForm):
     description = forms.CharField(widget=CKEditorUploadingWidget())
 
@@ -22,15 +26,18 @@ class ContentForAdminForm(forms.ModelForm):
 
 
 class GoodsAdmin(admin.ModelAdmin):
+    inlines = [
+        ImageInline,
+    ]
     save_on_top = True
     prepopulated_fields = {'slug': ('name',)}
     form = GoodsAdminForm
-    list_display = ('id', 'name', 'slug', 'price', 'amount',  'category', 'created_at', 'get_photo', )
+    list_display = ('id', 'name', 'slug', 'price', 'amount', 'category', 'created_at', 'get_photo',)
     list_display_links = ('id', 'name')
     search_fields = ('name',)
     list_filter = ('category',)
     readonly_fields = ('created_at', 'get_photo')
-    fields = ('name', 'slug', 'category', 'price','amount',  'tags', 'description', 'photo', 'get_photo', 'created_at')
+    fields = ('name', 'slug', 'category', 'price', 'amount', 'tags', 'description', 'photo', 'get_photo', 'created_at')
 
     def get_photo(self, obj):
         if obj.photo:
@@ -44,11 +51,10 @@ class ContentForAdmin(admin.ModelAdmin):
     form = ContentForAdminForm
     save_on_top = True
     prepopulated_fields = {'slug': ('title',)}
-    list_display = ('id', 'title', 'slug', )
+    list_display = ('id', 'title', 'slug',)
     list_display_links = ('id', 'title')
     search_fields = ('title',)
     fields = ('title', 'slug', 'content')
-
 
 
 class CategoryAdmin(admin.ModelAdmin):

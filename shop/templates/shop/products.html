@@ -36,7 +36,7 @@
   <div class="row posts">
     {% for post in posts %}
     <div id="1" class="item new col-md-4">
-      <a href="single-product.html">
+      <a href="{{ post.get_absolute_url }}">
         <div class="featured-item">
           {% if post.photo %}
           <img src="{{ post.photo.url }}" width=248 height=188 alt="{{ post.title }}
@@ -44,7 +44,7 @@
           {% else %}
           <img src="https://picsum.photos/id/237/300/201" width=248 height=188 alt="{{ post.title }}" >
           {% endif %}
-          <h4>{{ post.name }}</h4>
+          <h4 href="{{ post.get_absolute_url }}" >{{ post.name }}</h4>
           <h6>{{ post.price }}</h6>
         </div>
       </a>

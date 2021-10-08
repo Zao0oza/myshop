@@ -10,6 +10,8 @@ from shop.models import *
 from django.contrib import messages
 
 
+
+
 class AboutPage(DetailView):
     model = ContentFor
     template_name = 'shop/about.html'
@@ -74,7 +76,7 @@ def feedback(request):
     if request.method == 'POST':
         form = ContactForm(request.POST)
         if form.is_valid():
-            mail = send_mail(form.cleaned_data['subject'], form.cleaned_data['content'], 'danfeigin@yandex.ru', ['sefeigin@mail.ru'], fail_silently=False)
+            mail = send_mail(form.cleaned_data['subject'], form.cleaned_data['email']+'\n'+ form.cleaned_data['content'], 'danfeigin@yandex.ru', ['sefeigin@mail.ru'], fail_silently=False)
             if mail:
                 messages.success(request, 'Письмо отправлено')
                 return redirect('home')
@@ -83,3 +85,17 @@ def feedback(request):
     else:
         form = ContactForm()
     return render(request, 'shop/feedback.html', {'form': form})
+
+
+class GetProduct(DetailView):
+    model = Goods
+    template_name = 'shop/single-product.html'
+    context_object_name = 'post'
+
+    def get_context_data(self, *, object_list=None, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['title'] = 'Главная страница'
+        self.object.views = F('views')+1
+        self.object.save()
+        self.object.refresh_from_db()
+        return context

@@ -43,7 +43,9 @@ INSTALLED_APPS = [
     'djmoney',
     'django_filters',
     'captcha',
+    'django.forms',
     'debug_toolbar',
+    'sorl.thumbnail',
 
 ]
 
@@ -56,6 +58,7 @@ MIDDLEWARE = [
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
     'debug_toolbar.middleware.DebugToolbarMiddleware',
+
 ]
 
 ROOT_URLCONF = 'myshop.urls'
@@ -215,3 +218,4 @@ EMAIL_HOST_PASSWORD = '516983Django'
 EMAIL_PORT = 465
 EMAIL_USE_TLS = False
 EMAIL_USE_SSL = True
+FORM_RENDERER = 'django.forms.renderers.TemplatesSetting'
