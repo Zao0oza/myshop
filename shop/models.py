@@ -6,22 +6,6 @@ from djmoney.models.validators import MaxMoneyValidator, MinMoneyValidator
 from django.urls import reverse, reverse_lazy
 
 
-class Category(models.Model):
-    name = models.CharField(max_length=255, verbose_name='Название категории')
-    slug = models.SlugField(max_length=255, verbose_name='Url', unique=True)
-
-    def __str__(self):
-        return self.name
-
-    def get_absolute_url(self):
-        return reverse('category', kwargs={'slug': self.slug})
-
-    class Meta:
-        verbose_name = 'Коллекция'
-        verbose_name_plural = 'Коллекции'
-        ordering = ['name']
-
-
 class Tag(models.Model):
     name = models.CharField(max_length=50, verbose_name='Тэг')
     slug = models.SlugField(max_length=50, verbose_name='Url', unique=True)
@@ -39,16 +23,17 @@ class Tag(models.Model):
 
 
 
-class Goods(models.Model):
+class Products(models.Model):
     name = models.CharField(max_length=255, verbose_name='Название')
     slug = models.SlugField(max_length=255, verbose_name='Url', unique=True)
     description = models.TextField(blank=True, verbose_name='Описание')
     created_at = models.DateTimeField(auto_now=True, verbose_name='Опубликовано')
     photo = models.ImageField(upload_to='photo/%Y/%m/%d/', blank=True, verbose_name='Фото')
     amount = models.IntegerField(verbose_name='Кол-во')
+    #price = models.DecimalField(default=0, max_digits=10, decimal_places=2)
     price = MoneyField(default=0, max_digits=14, decimal_places=2, default_currency='USD', verbose_name='Цена')
-    category = models.ForeignKey(Category, on_delete=models.PROTECT, related_name='goods')
-    tags = models.ManyToManyField(Tag, blank=True, related_name='goods')
+    tags = models.ManyToManyField(Tag, blank=True, related_name='product')
+
 
     def __str__(self):
         return self.name
@@ -80,5 +65,5 @@ class ContentFor(models.Model): #класс создан для удобного
 
 
 class ImagesInline (models.Model):
-    goods = models.ForeignKey(Goods, default=None, on_delete=models.PROTECT, related_name='image')
+    products = models.ForeignKey(Products, default=None, on_delete=models.PROTECT, related_name='image')
     image = models.ImageField(upload_to='photo/%Y/%m/%d/', blank=True)

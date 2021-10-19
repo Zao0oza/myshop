@@ -1,0 +1,16 @@
+<div id="subheader">
+    <div class='cart'>
+        {% with total_items=cart|length %}
+        <i class="fa" style="font-size:24px">&#xf07a;</i>
+<span class='badge badge-warning' id='lblCartCount'> {{ total_items }} </span>
+        {% if cart|length > 0 %}
+        В корзине
+        <a href="">
+            {{ total_items }} шт {{ cart.get_total_price }}
+        </a>
+        {% else %}
+            Корзина пуста
+        {% endif %}
+        {% endwith %}
+    </div>
+</div>

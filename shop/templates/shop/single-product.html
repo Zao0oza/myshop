@@ -16,16 +16,46 @@
         <div class="product-slider">
           <div id="slider" class="flexslider">
             <ul class="slides">
+              {% if post.photo %}
               <li>
-                {% for image in post.image.all %}
-                {% thumbnail image.image "500x500" format="PNG" upscale=False as thumb %}
-                <img src="{{ thumb.url }}" alt="{{ product.name }}">
-                {% endthumbnail %}
-                {% endfor %}
+                <img src="{{ post.photo.url }}" width=250px" />
               </li>
-              <!-- items mirrored twice, total of 12 -->
+              {% else %}
+              <li>
+                <img src="https://picsum.photos/id/237/300/201" width=250px" />
+              </li>
+              {% endif %}
+              {% for image in post.image.all %}
+              <li>
+                <img src="{{ image.image.url }}" width=250px" />
+              </li>
+              {% endfor %}
             </ul>
           </div>
+          {% if post.image.exists %}
+          <div id="carousel" class="flexslider">
+            <ul class="slides">
+              {% if post.photo %}
+              <li>
+                <img src="{{ post.photo.url }}" width=250px" />
+              </li>
+              {% else %}
+              <li>
+                <img src="https://picsum.photos/id/237/300/201" width=250px" />
+              </li>
+              {% endif %}
+              {% for image in post.image.all %}
+              <li>
+                <img src="{{ image.image.url }}" />
+              </li>
+              {% endfor %}
+            </ul>
+          </div>
+          {% endif %}
+
+          <!-- items mirrored twice, total of 12 -->
+
+
 
         </div>
       </div>
@@ -35,14 +65,12 @@
           <h6>{{ post.price }}</h6>
           <p>{{ post.description|safe }} </p>
           <span> В наличии: {{ post.amount }}</span>
-          <form action="" method="get">
-            <label for="quantity">Количество:</label>
-            <input name="quantity" type="quantity" class="quantity-text" id="quantity"
-                   onfocus="if(this.value == '1') { this.value = ''; }"
-                   onBlur="if(this.value == '') { this.value = '1';}"
-                   value="1">
-            <input type="submit" class="button" value="Заказать!">
-          </form>
+          <form action="{% url 'cart:cart_add' post.id %}" method="post">
+            {{ cart_product_form }}
+            {% csrf_token %}
+            <input type="submit" class="button" value=" В корзину">
+            </form>
+
           <div class="down-content">
             <div class="categories">
               {% if post.tags.exists %}

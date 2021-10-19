@@ -69,6 +69,13 @@ a {
 }
 
 /* Header Style */
+#lblCart{
+color: #1e1e1e
+}
+
+#lblCartCount {
+    background-color: #ff5400
+}
 .navbar .navbar-brand {
 	text-align: center;
 	width: 100%;
@@ -483,7 +490,7 @@ a {
 	font-size: 14px;
 	color: #4a4a4a;
 }
-.single-product .right-content .quantity-text {
+#id_quantity {
 	margin-left: 10px;
 	width: 44px;
 	height: 44px;
@@ -496,6 +503,8 @@ a {
 	outline: none;
 	border: 1px solid #eee;
 }
+
+
 .single-product .right-content .button {
 	margin-left: 15px;
 	cursor: pointer;
