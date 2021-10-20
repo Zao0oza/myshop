@@ -505,7 +505,7 @@ color: #1e1e1e
 }
 
 
-.single-product .right-content .button {
+button {
 	margin-left: 15px;
 	cursor: pointer;
 	background-color: #ff5400;
@@ -522,6 +522,9 @@ color: #1e1e1e
 	transition: all 0.5s;
 	box-shadow: none;
 	border: none;
+}
+button:hover {
+  background-color: #ff4100;
 }
 .single-product .right-content .down-content span {
 	margin-bottom: 0px;

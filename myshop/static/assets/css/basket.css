@@ -57,8 +57,8 @@ Side note: I know that this style of nesting in SASS doesn't result in the most 
 
 /* Apply clearfix in a few places */
 /* Apply dollar signs */
-.product .product-price:before, .product .product-line-price:before, .totals-value:before {
-  content: '$';
+.product .product-price:after, .product .product-line-price:after, .totals-value:after {
+  content: ' \20BD';
 }
 
 /* Body/Header stuff */
@@ -100,7 +100,13 @@ label {
   text-align: center;
 }
 .product .product-image img {
-  width: 100px;
+  width: 150px;
+}
+a {
+color: #f8f9fa;
+}
+a:hover {
+color: #f8f9fa;
 }
 .product .product-details .product-title {
   margin-right: 20px;
@@ -148,20 +154,12 @@ label {
   font-family: "HelveticaNeue-Medium", "Helvetica Neue Medium";
 }
 
-.checkout {
-  float: right;
-  border: 0;
-  margin-top: 20px;
-  padding: 6px 25px;
-  background-color: #6b6;
-  color: #fff;
-  font-size: 25px;
-  border-radius: 3px;
+.button {
+float: right;
+
 }
 
-.checkout:hover {
-  background-color: #494;
-}
+
 
 /* Make adjustments for tablet */
 @media screen and (max-width: 650px) {
@@ -228,7 +226,7 @@ label {
   }
 
   .product .product-line-price:before {
-    content: 'Item Total: $';
+    content: ' \20BD';
   }
 
   .totals .totals-item label {

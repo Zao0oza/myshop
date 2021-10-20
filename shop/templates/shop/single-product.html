@@ -66,9 +66,9 @@
           <p>{{ post.description|safe }} </p>
           <span> В наличии: {{ post.amount }}</span>
           <form action="{% url 'cart:cart_add' post.id %}" method="post">
-            {{ cart_product_form }}
+            {{ cart_product_form  }}
             {% csrf_token %}
-            <input type="submit" class="button" value=" В корзину">
+            <button type="submit" class="button">В корзину</button>
             </form>
 
           <div class="down-content">

@@ -26,7 +26,7 @@
       </ul>
     </div>
   </div>
-  <a  href="{% url 'cart:cart_detail' %}" ><i class="fa"  id="lblCart" style="font-size:48px">&#xf07a;</i>
+  <a  href="{% if cart|length > 0  %}{% url 'cart:cart_detail' %}{% endif %}" ><i class="fa"  id="lblCart" style="font-size:48px">&#xf07a;</i>
   <span class='badge badge-warning' id='lblCartCount' background-color="#ff5400"> {{ cart|length }} </span></a>
 
 </nav>

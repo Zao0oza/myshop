@@ -29,11 +29,8 @@ class Cart(object):
             cart[str(product.id)]['product'] = product
 
         for item in cart.values():
-            try:
-                item['price'] = Decimal(item['price'].replace(',', '.').split(u'\xa0')[0])
-            except:
-                pass
-            item['total_price'] = item['price'] * item['quantity']
+
+            item['total_price'] = Decimal(item['price']) * item['quantity']
             yield item
 
     def __len__(self):
@@ -49,7 +46,7 @@ class Cart(object):
         product_id = str(product.id)
         if product_id not in self.cart:
             self.cart[product_id] = {'quantity': 0,
-                                     'price': str(product.price)}
+                                     'price': str(product.price.amount)}
         if update_quantity:
             self.cart[product_id]['quantity'] = quantity
         else:
@@ -71,11 +68,8 @@ class Cart(object):
 
     def get_total_price(self):
         for item in self.cart.values():
-            try:
-                item['price'] = Decimal(item['price'].replace(',', '.').split(u'\xa0')[0])
-            except:
-                pass
-            item['total_price'] = item['price'] * item['quantity']
+
+            item['total_price'] = Decimal(item['price']) * item['quantity']
         # получаем общую стоимость
         return sum(item['total_price'] for item in self.cart.values())
 

@@ -30,8 +30,7 @@ class Products(models.Model):
     created_at = models.DateTimeField(auto_now=True, verbose_name='Опубликовано')
     photo = models.ImageField(upload_to='photo/%Y/%m/%d/', blank=True, verbose_name='Фото')
     amount = models.IntegerField(verbose_name='Кол-во')
-    #price = models.DecimalField(default=0, max_digits=10, decimal_places=2)
-    price = MoneyField(default=0, max_digits=14, decimal_places=2, default_currency='USD', verbose_name='Цена')
+    price = MoneyField(default=0, max_digits=14, decimal_places=0, default_currency='RUB', verbose_name='Цена')
     tags = models.ManyToManyField(Tag, blank=True, related_name='product')
 
 
