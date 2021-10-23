@@ -1,3 +1,4 @@
+{% load carousel %}
 <div class="featured-items">
     <div class="container">
         <div class="row">
@@ -7,11 +8,10 @@
                     <h1>{% block title %}{% endblock %}</h1>
                 </div>
             </div>
-
             <div class="col-md-12">
                 <div class="owl-carousel owl-theme">
                     {% for post in posts %}
-                    <a href="">
+                    <a href="{{ post.get_absolute_url }}">
                         <div class="featured-item">
                             {% if post.photo %}
                             <img src="{{ post.photo.url }}" alt="{{ post.title }}" >
@@ -21,9 +21,8 @@
                             <h4>{{ post.name }}</h4>
                             <h6>{{ post.price }}</h6>
                         </div>
-                        {% endfor %}
-                    {% endfor %}
                     </a>
+                    {% endfor %}
                 </div>
             </div>
         </div>

@@ -62,6 +62,14 @@ class TagAdmin(admin.ModelAdmin):
     prepopulated_fields = {'slug': ('name',)}
 
 
+class OrdersAdmin(admin.ModelAdmin):
+    list_display = ('id', 'name', 'order_status','ordered_at', 'status_change_at', 'payed')
+    list_display_links = ('id', 'name')
+    search_fields = ('name',)
+    #fields = ('title', 'slug', 'content')
+
+
 admin.site.register(Tag, TagAdmin)
 admin.site.register(Products, GoodsAdmin)
 admin.site.register(ContentFor, ContentForAdmin)
+admin.site.register(Orders, OrdersAdmin)

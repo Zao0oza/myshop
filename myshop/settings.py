@@ -44,6 +44,7 @@ INSTALLED_APPS = [
     'ckeditor',
     'ckeditor_uploader',
     'djmoney',
+    "taggit",
     'django_filters',
     'captcha',
     'django.forms',

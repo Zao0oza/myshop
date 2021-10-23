@@ -64,7 +64,8 @@
     </div>
 
     <button class="button">Оформить</button>
-    <button class="button" ><a href="{% url 'products' %}">Продолжить покупки</a></button>
+    <form  action="{% url 'products' %}">
+    <button class="button" >Продолжить покупки</button></form>
     {% else %}
     <h1>Упсс в коризне ничего нет добавьте товары </h1>
     {% endif %}

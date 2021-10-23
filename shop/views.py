@@ -4,7 +4,7 @@ from django.http import HttpResponse
 from django.views import View
 from django.views.generic import ListView, DetailView
 from django.db.models import F
-
+from django.db.models import Count
 from cart.forms import CartAddProductForm
 from shop.forms import ContactForm
 from shop.models import *
@@ -84,6 +84,7 @@ class GetProduct(DetailView):
     template_name = 'shop/single-product.html'
     context_object_name = 'post'
 
+
     def get_context_data(self, *, object_list=None, **kwargs):
         context = super().get_context_data(**kwargs)
         context['title'] = 'Главная страница'
@@ -93,4 +94,7 @@ class GetProduct(DetailView):
 def product_detail(request, slug):
     product = get_object_or_404(Products, slug=slug)
     cart_product_form=CartAddProductForm()
-    return render(request, 'shop/single-product.html', {'post': product,                                       'cart_product_form': cart_product_form})
+    product_tags_ids = Products.tags.values_list('id', flat=True)
+    similar_product = Products.objects.filter(tags__in=product_tags_ids).exclude(id=product.id)
+    similar_product = similar_product.annotate(same_tags=Count('tags')).order_by('-same_tags')[:4]
+    return render(request, 'shop/single-product.html', {'post': product, 'cart_product_form': cart_product_form, 'similar_posts': similar_product})
