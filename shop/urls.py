@@ -9,5 +9,6 @@ urlpatterns=[
     path('about/', about, name='about'),
     path('contact/', ContactPage.as_view(), name='contact'),
     path('products/<str:slug>/', product_detail, name='product'),
+    path("register", register_request, name="register"),
 
 ]

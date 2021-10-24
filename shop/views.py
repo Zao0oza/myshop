@@ -1,3 +1,4 @@
+from django.conf import settings
 from django.core.mail import send_mail
 from django.shortcuts import render, redirect, get_object_or_404
 from django.http import HttpResponse
@@ -9,6 +10,8 @@ from cart.forms import CartAddProductForm
 from shop.forms import ContactForm
 from shop.models import *
 from django.contrib import messages
+from .forms import NewUserForm
+from django.contrib.auth import login
 
 
 def about(request):
@@ -32,8 +35,8 @@ class ProductsPage(ListView):
     context_object_name = 'posts'
     paginate_by = 6
 
-    def get_queryset(self,**kwargs):
-        queryset=super().get_queryset(**kwargs)
+    def get_queryset(self, **kwargs):
+        queryset = super().get_queryset(**kwargs)
         if self.request.method == 'GET':
             if 'low' in self.request.GET:
                 return queryset.order_by('price')
@@ -68,7 +71,9 @@ def feedback(request):
     if request.method == 'POST':
         form = ContactForm(request.POST)
         if form.is_valid():
-            mail = send_mail(form.cleaned_data['subject'], form.cleaned_data['email']+'\n'+ form.cleaned_data['content'], 'danfeigin@yandex.ru', ['sefeigin@mail.ru'], fail_silently=False)
+            mail = send_mail(form.cleaned_data['subject'],
+                             form.cleaned_data['email'] + '\n' + form.cleaned_data['content'], 'danfeigin@yandex.ru',
+                             ['sefeigin@mail.ru'], fail_silently=False)
             if mail:
                 messages.success(request, 'Письмо отправлено')
                 return redirect('home')
@@ -84,7 +89,6 @@ class GetProduct(DetailView):
     template_name = 'shop/single-product.html'
     context_object_name = 'post'
 
-
     def get_context_data(self, *, object_list=None, **kwargs):
         context = super().get_context_data(**kwargs)
         context['title'] = 'Главная страница'
@@ -93,8 +97,22 @@ class GetProduct(DetailView):
 
 def product_detail(request, slug):
     product = get_object_or_404(Products, slug=slug)
-    cart_product_form=CartAddProductForm()
+    cart_product_form = CartAddProductForm()
     product_tags_ids = Products.tags.values_list('id', flat=True)
     similar_product = Products.objects.filter(tags__in=product_tags_ids).exclude(id=product.id)
     similar_product = similar_product.annotate(same_tags=Count('tags')).order_by('-same_tags')[:4]
-    return render(request, 'shop/single-product.html', {'post': product, 'cart_product_form': cart_product_form, 'similar_posts': similar_product})
+    return render(request, 'shop/single-product.html',
+                  {'post': product, 'cart_product_form': cart_product_form, 'similar_posts': similar_product})
+
+
+def register_request(request):
+    if request.method == "POST":
+        form = NewUserForm(request.POST)
+        if form.is_valid():
+            user = form.save()
+            login(request, user)
+            messages.success(request, "Registration successful.")
+            return redirect("homepage")
+        messages.error(request, "Unsuccessful registration. Invalid information.")
+    form = NewUserForm()
+    return render(request=request, template_name="shop/register.html", context={"register_form": form})

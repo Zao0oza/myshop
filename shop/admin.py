@@ -56,20 +56,27 @@ class ContentForAdmin(admin.ModelAdmin):
     fields = ('title', 'slug', 'content')
 
 
-
-
-class TagAdmin(admin.ModelAdmin):
-    prepopulated_fields = {'slug': ('name',)}
-
-
 class OrdersAdmin(admin.ModelAdmin):
-    list_display = ('id', 'name', 'order_status','ordered_at', 'status_change_at', 'payed')
+    list_display = ('id', 'name', 'order_status', 'ordered_at', 'status_change_at', 'payed')
     list_display_links = ('id', 'name')
     search_fields = ('name',)
-    #fields = ('title', 'slug', 'content')
+    # fields = ('title', 'slug', 'content')
 
 
-admin.site.register(Tag, TagAdmin)
+@admin.register(CustomerAdress)
+class CustomerAdressAdmin(admin.ModelAdmin):
+    list_display = ('id', 'address1', 'city')
+
+
+@admin.register(Customer)
+class CustomerAdmin(admin.ModelAdmin):
+    list_display = ('user_name',
+                    'first_name',
+                    'last_name',
+                    'email',
+                    'phone_number')
+
+
 admin.site.register(Products, GoodsAdmin)
 admin.site.register(ContentFor, ContentForAdmin)
 admin.site.register(Orders, OrdersAdmin)

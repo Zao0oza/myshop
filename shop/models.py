@@ -1,26 +1,10 @@
-from debug_toolbar import forms
+from django.contrib.auth.models import User
 from django.db import models
 from djmoney.models.fields import MoneyField
-from djmoney.money import Money
-from djmoney.models.validators import MaxMoneyValidator, MinMoneyValidator
-from django.urls import reverse, reverse_lazy
+
+from django.urls import reverse
 from taggit.managers import TaggableManager
-
-
-class Tag(models.Model):
-    name = models.CharField(max_length=50, verbose_name='Тэг')
-    slug = models.SlugField(max_length=50, verbose_name='Url', unique=True)
-
-    def __str__(self):
-        return self.name
-
-    def get_absolute_url(self):
-        return reverse('tag', kwargs={'slug': self.slug})
-
-    class Meta:
-        verbose_name = 'Тег'
-        verbose_name_plural = 'Теги'
-        ordering = ['name']
+from phonenumber_field.modelfields import PhoneNumberField
 
 
 class Products(models.Model):
@@ -69,6 +53,28 @@ class ImagesInline(models.Model):
     image = models.ImageField(upload_to='photo/%Y/%m/%d/', blank=True)
 
 
+
+
+
+class CustomerAdress(models.Model):
+    address1 = models.CharField("Address line 1", max_length=1024)
+    address2 = models.CharField("Address line 2", max_length=1024, blank=True, null=True)
+    zip_code = models.CharField("ZIP", max_length=12)
+    city = models.CharField("City", max_length=1024)
+
+
+class Customer(models.Model):
+    customer_adress = models.ForeignKey(CustomerAdress, on_delete=models.PROTECT)
+    user_name = models.CharField(max_length=150, blank=True)
+    first_name = models.CharField(max_length=150, blank=True)
+    last_name = models.CharField(max_length=150, blank=True)
+    email=models.EmailField(default=None)
+    phone_number = PhoneNumberField()
+
+    def __str__(self):
+        return self.user_name
+
+
 class Orders(models.Model):
     STATUS = [('OB', 'обработка'), ('PO', 'подтверждён'), ('PE', 'передан в службу доставки'), ('DO', 'доставлен')]
     name = models.ForeignKey(Products, default=None, on_delete=models.PROTECT)
@@ -76,5 +82,5 @@ class Orders(models.Model):
     ordered_at = models.DateTimeField(auto_now=True, verbose_name='заказ создан')
     status_change_at = models.DateTimeField(auto_now_add=True, verbose_name='изменение статуса')
     payed = models.BooleanField(verbose_name='оплачен')
-    customer=models.CharField(max_length=50, verbose_name='ФИО')
-    customer_adress=models.CharField(max_length=50, verbose_name='ФИО')
+    customer = models.ForeignKey(Customer, default=None, on_delete=models.PROTECT)
+
