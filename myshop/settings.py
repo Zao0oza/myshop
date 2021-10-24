@@ -41,6 +41,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'cart.apps.CartConfig',
     'ckeditor',
+    'crispy_forms',
     'shop',
     'ckeditor_uploader',
     'djmoney',
@@ -221,5 +222,3 @@ EMAIL_PORT = 465
 EMAIL_USE_TLS = False
 EMAIL_USE_SSL = True
 FORM_RENDERER = 'django.forms.renderers.TemplatesSetting'
-GOOGLE_API_KEY='AIzaSyCJ6oN-XPi_zgAWrkKlIOzMCWdUuELpAlA'
-#AUTH_USER_MODEL = 'accounts.User'

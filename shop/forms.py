@@ -22,7 +22,7 @@ class ContactForm(forms.Form):
 
 class NewUserForm(UserCreationForm):
     email = forms.EmailField(required=True)
-    inlines = (CustomerInline,)
+    inlines = (CustomerInline)
 
     class Meta:
         model = User
@@ -33,6 +33,6 @@ class NewUserForm(UserCreationForm):
         user.email = self.cleaned_data['email']
         if commit:
             user.save()
-        return user 
+        return user
 
 

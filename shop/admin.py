@@ -57,9 +57,9 @@ class ContentForAdmin(admin.ModelAdmin):
 
 
 class OrdersAdmin(admin.ModelAdmin):
-    list_display = ('id', 'name', 'order_status', 'ordered_at', 'status_change_at', 'payed')
-    list_display_links = ('id', 'name')
-    search_fields = ('name',)
+    list_display = ('id', 'product_name', 'status', 'ordered_at', 'delivered_at', 'payed')
+    list_display_links = ('id', 'product_name')
+    search_fields = ('product_name',)
     # fields = ('title', 'slug', 'content')
 
 
@@ -70,11 +70,7 @@ class CustomerAdressAdmin(admin.ModelAdmin):
 
 @admin.register(Customer)
 class CustomerAdmin(admin.ModelAdmin):
-    list_display = ('user_name',
-                    'first_name',
-                    'last_name',
-                    'email',
-                    'phone_number')
+    list_display = ('user', 'phone_number')
 
 
 admin.site.register(Products, GoodsAdmin)
