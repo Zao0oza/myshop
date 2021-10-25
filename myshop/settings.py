@@ -27,8 +27,7 @@ SECRET_KEY = 'f0n309rtdj3c-d%9spnvstpv0=rp_-0l&s!jvf58=@5+xyn+)r'
 DEBUG = True
 
 ALLOWED_HOSTS = []
-
-CART_SESSION_ID = 'cart'
+CART_SESSION_ID='cart'
 
 # Application definition
 
@@ -222,3 +221,5 @@ EMAIL_PORT = 465
 EMAIL_USE_TLS = False
 EMAIL_USE_SSL = True
 FORM_RENDERER = 'django.forms.renderers.TemplatesSetting'
+CRISPY_TEMPLATE_PACK = 'bootstrap'
+SESSION_ENGINE = 'django.contrib.sessions.backends.cached_db'

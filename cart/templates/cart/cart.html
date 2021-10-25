@@ -62,8 +62,8 @@
             <div class="totals-value" id="cart-total">{{ cart.get_total_price|add:'15' }}</div>
         </div>
     </div>
-
-    <button class="button">Оформить</button>
+    <form action="{% url 'order_create' %}">
+    <button class="button">Оформить</button></form>
     <form  action="{% url 'products' %}">
     <button class="button" >Продолжить покупки</button></form>
     {% else %}

@@ -55,23 +55,8 @@ class ImagesInline(models.Model):
     image = models.ImageField(upload_to='photo/%Y/%m/%d/', blank=True)
 
 
-class CustomerAdress(models.Model):
-    address1 = models.CharField("Address line 1", max_length=1024)
-    address2 = models.CharField("Address line 2", max_length=1024, blank=True, null=True)
-    zip_code = models.CharField("ZIP", max_length=12)
-    city = models.CharField("City", max_length=1024)
-
-
-class Customer(models.Model):
-    user = models.ForeignKey(User, verbose_name='Пользователь', on_delete=models.CASCADE)
-    phone_number = PhoneNumberField(verbose_name='Номер телефона')
-    user_orders = models.ManyToManyField('Orders', verbose_name='Заказы покупателя', related_name='related_order')
-
-    def __str__(self):
-        return "Покупатель: {} {}".format(self.user.first_name, self.user.last_name)
-
-
 class Orders(models.Model):
+
     STATUS_NEW = 'new'
     STATUS_IN_PROGRESS = 'in_progress'
     STATUS_READY = 'is_ready'
@@ -93,12 +78,15 @@ class Orders(models.Model):
         (BUYING_TYPE_DELIVERY, 'Доставка')
     )
 
-
-    product_name = models.ForeignKey(Products, default=None, on_delete=models.PROTECT)
+    email = models.EmailField()
+    user = models.ForeignKey(User, verbose_name='Пользователь', on_delete=models.CASCADE, null=True, blank=True)
+    address = models.CharField("Address", max_length=1024)
+    zip_code = models.CharField("ZIP", max_length=12)
+    city = models.CharField("City", max_length=1024)
+    phone_number = PhoneNumberField(verbose_name='Номер телефона', null=True, blank=True)
     ordered_at = models.DateTimeField(auto_now=True, verbose_name='заказ создан')
     delivered_at = models.DateTimeField(verbose_name='доставлен', default=timezone.now, null=True, blank=True)
-    payed = models.BooleanField(verbose_name='оплачен')
-    customer = models.ForeignKey(Customer, default=None, on_delete=models.PROTECT)
+    payed = models.BooleanField(verbose_name='оплачен', default=False,null=True, blank=True)
     first_name = models.CharField(max_length=150, blank=True)
     last_name = models.CharField(max_length=150, blank=True)
     status = models.CharField(
@@ -115,8 +103,27 @@ class Orders(models.Model):
     )
     comment = models.TextField(verbose_name='Комментарий к заказу', null=True, blank=True)
 
+    class Meta:
+        ordering = ('-ordered_at',)
+        verbose_name = 'Заказ'
+        verbose_name_plural = 'Заказы'
+
     def __str__(self):
-        return str(self.id)
+        return '{}'.format(self.id)
+
+    def get_total_cost(self):
+        return sum(item.get_cost() for item in self.items.all())
 
 
+class OrderItem(models.Model):
+    order = models.ForeignKey(Orders, related_name='items', on_delete=models.PROTECT)
+    product = models.ForeignKey(Products, related_name='order_items', on_delete=models.PROTECT)
+    price = models.DecimalField(max_digits=10, decimal_places=2)
+    quantity = models.PositiveIntegerField(default=1)
+
+    def __str__(self):
+        return '{}'.format(self.id)
+
+    def get_cost(self):
+        return self.price * self.quantity
 

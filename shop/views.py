@@ -1,4 +1,5 @@
 from django.conf import settings
+from django.contrib.auth.forms import AuthenticationForm
 from django.core.mail import send_mail
 from django.shortcuts import render, redirect, get_object_or_404
 from django.http import HttpResponse
@@ -6,12 +7,14 @@ from django.views import View
 from django.views.generic import ListView, DetailView
 from django.db.models import F
 from django.db.models import Count
+
+from cart.cart import Cart
 from cart.forms import CartAddProductForm
 from shop.forms import ContactForm
 from shop.models import *
 from django.contrib import messages
-from .forms import NewUserForm
-from django.contrib.auth import login
+from .forms import NewUserForm, OrderCreateForm
+from django.contrib.auth import login, authenticate, logout
 
 
 def about(request):
@@ -112,7 +115,57 @@ def register_request(request):
             user = form.save()
             login(request, user)
             messages.success(request, "Registration successful.")
-            return redirect("homepage")
+            return redirect("home")
         messages.error(request, "Unsuccessful registration. Invalid information.")
     form = NewUserForm()
     return render(request=request, template_name="shop/register.html", context={"register_form": form})
+
+
+def login_request(request):
+    if request.method == "POST":
+        form = AuthenticationForm(request, data=request.POST)
+        if form.is_valid():
+            username = form.cleaned_data.get('username')
+            password = form.cleaned_data.get('password')
+            if  request.session:
+                print(request.session['cart'])
+            else:
+                pass
+            user = authenticate(username=username, password=password)
+            if user is not None:
+                login(request, user)
+                messages.info(request, f"You are now logged in as {username}.")
+                return redirect("home")
+            else:
+                messages.error(request, "Invalid username or password.")
+        else:
+            messages.error(request, "Invalid username or password.")
+    form = AuthenticationForm()
+    return render(request=request, template_name="shop/login.html", context={"login_form": form})
+
+
+def logout_request(request):
+    logout(request)
+    messages.info(request, "You have successfully logged out.")
+    return redirect("home")
+
+
+def order_create(request):
+    cart = Cart(request)
+    if request.method == 'POST':
+        form = OrderCreateForm(request.POST)
+        if form.is_valid():
+            order = form.save()
+            for item in cart:
+                OrderItem.objects.create(order=order,
+                                         product=item['product'],
+                                         price=item['price'],
+                                         quantity=item['quantity'])
+            # очистка корзины
+            cart.clear()
+            return render(request, 'shop/order_created.html',
+                          {'order': order})
+    else:
+        form = OrderCreateForm
+    return render(request, 'shop/order_create.html',
+                  {'cart': cart, 'form': form})

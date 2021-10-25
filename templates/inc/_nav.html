@@ -26,7 +26,18 @@
       </ul>
     </div>
   </div>
+  {% if user.is_authenticated %}
+  <form  action="{% url 'logout' %}">
+    <button class="button" >Выйти</button></form>
+
+    <a class="nav-link" href="#">Welcome, {{user.username}}</a>
+
+  {% else %}
+  <form  action="{% url 'login' %}">
+    <button class="button" >Войти</button></form>
+
+  {% endif %}
   <a  href="{% if cart|length > 0  %}{% url 'cart:cart_detail' %}{% endif %}" ><i class="fa"  id="lblCart" style="font-size:48px">&#xf07a;</i>
-  <span class='badge badge-warning' id='lblCartCount' background-color="#ff5400"> {{ cart|length }} </span></a>
+    <span class='badge badge-warning' id='lblCartCount' background-color="#ff5400"> {{ cart|length }} </span></a>
 
 </nav>

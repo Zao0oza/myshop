@@ -56,21 +56,18 @@ class ContentForAdmin(admin.ModelAdmin):
     fields = ('title', 'slug', 'content')
 
 
+
+class OrderItemInline(admin.TabularInline):
+    model = OrderItem
+    raw_id_fields = ['product']
+
 class OrdersAdmin(admin.ModelAdmin):
-    list_display = ('id', 'product_name', 'status', 'ordered_at', 'delivered_at', 'payed')
-    list_display_links = ('id', 'product_name')
+    list_display = ('id', 'status', 'ordered_at', 'delivered_at', 'payed')
+    list_display_links = ('id',)
     search_fields = ('product_name',)
+    inlines=[OrderItemInline]
     # fields = ('title', 'slug', 'content')
 
-
-@admin.register(CustomerAdress)
-class CustomerAdressAdmin(admin.ModelAdmin):
-    list_display = ('id', 'address1', 'city')
-
-
-@admin.register(Customer)
-class CustomerAdmin(admin.ModelAdmin):
-    list_display = ('user', 'phone_number')
 
 
 admin.site.register(Products, GoodsAdmin)

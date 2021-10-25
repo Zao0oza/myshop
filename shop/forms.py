@@ -1,19 +1,20 @@
 from django import forms
 from captcha.fields import CaptchaField
 from django.contrib.auth.forms import UserCreationForm
-from .models import Customer
 
 from django.contrib import admin
 from django.contrib.auth.models import User
 
-class CustomerInline(admin.StackedInline):
-    model = Customer
-    can_delete = False
-    verbose_name_plural = 'customer'
+from .models import Orders
+
+
+class OrderCreateForm(forms.ModelForm):
+    class Meta:
+        model = Orders
+        fields = ['first_name', 'last_name', 'email', 'address', 'zip_code', 'city','phone_number']
 
 
 class ContactForm(forms.Form):
-
     subject = forms.CharField(label='Тема', widget=forms.TextInput(attrs={'class': 'form-control'}))
     email = forms.EmailField(label='Email', widget=forms.TextInput(attrs={'class': 'form-control'}))
     content = forms.CharField(label='Текст', widget=forms.Textarea(attrs={'class': 'form-control', 'rows': 5}))
@@ -22,7 +23,6 @@ class ContactForm(forms.Form):
 
 class NewUserForm(UserCreationForm):
     email = forms.EmailField(required=True)
-    inlines = (CustomerInline)
 
     class Meta:
         model = User
@@ -34,5 +34,3 @@ class NewUserForm(UserCreationForm):
         if commit:
             user.save()
         return user
-
-
