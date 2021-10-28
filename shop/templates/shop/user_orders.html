@@ -1,0 +1,48 @@
+{% extends "base.html" %}
+{% load order_item %}
+{% block title %}Thank you{% endblock %}
+{% load static %}
+{% block content %}
+<link rel="stylesheet" href="{% static 'assets/css/user_orders.css' %}">
+<h1>Ваши заказы</h1>
+
+<div class="orders-list">
+    <div class="container mt-5">
+        <table class="table table-borderless main">
+            <thead>
+            <tr class="head">
+                <th scope="col">Номер зазказа</th>
+                <th scope="col">Размещен</th>
+                <th scope="col">Товары в заказе</th>
+                <th scope="col">Цена</th>
+                <th scope="col">Статус</th>
+            </tr>
+            </thead>
+            {% if orders %}
+            {% for order in orders %}
+
+            {% show_orderitem order.id as orderitems  %}
+            <tbody>
+            <tr class="rounded bg-white">
+                <td  class="order-color" ><a href="{{ order.get_absolute_url }}">{{ order.id }}</a></td>
+                <td>{{ order.ordered_at|date:"d M, Y" }}</td>
+                <td>
+                    <ul class="list-group" >
+                        {% for orderitem in orderitems %}
+                        <li><a class="dropdown-item" href="{{ orderitem.product.get_absolute_url }}">{{ orderitem.product.name }}{% if orderitem.quantity > 1 %}(x{{ orderitem.quantity }}){% endif %}</a></li>
+                        {% endfor %}
+                    </ul>
+                </td>
+                <td>{{ order.get_total_cost  }}</td>
+                <td>{{ order.get_status_display}}</td>
+            </tr>
+            {% endfor %}
+            {% else %}
+            {% endif %}
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<script src="{% static 'vendor/bootstrap/js/bootstrap.bundle.min.js' %}"></script>
+{% endblock %}

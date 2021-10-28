@@ -5,13 +5,17 @@ from django.contrib.auth.forms import UserCreationForm
 from django.contrib import admin
 from django.contrib.auth.models import User
 
+
 from .models import Orders
 
 
 class OrderCreateForm(forms.ModelForm):
     class Meta:
         model = Orders
-        fields = ['first_name', 'last_name', 'email', 'address', 'zip_code', 'city','phone_number']
+        fields = ['first_name', 'last_name', 'email', 'address', 'zip_code', 'city','phone_number', 'user']
+        widgets = {
+            'user': forms.HiddenInput(),
+        }
 
 
 class ContactForm(forms.Form):

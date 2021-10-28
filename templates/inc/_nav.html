@@ -27,11 +27,20 @@
     </div>
   </div>
   {% if user.is_authenticated %}
-  <form  action="{% url 'logout' %}">
+
     <button class="button" >Выйти</button></form>
-
-    <a class="nav-link" href="#">Welcome, {{user.username}}</a>
-
+  <div class="btn-group">
+    <button type="button" class="btn btn-danger dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+      Профиль
+    </button>
+    <div class="dropdown-menu">
+      <a class="dropdown-item" href="#">Мой профиль</a>
+      <a class="dropdown-item" href="">Корзина {% if cart|length != 0 %} ({{ cart|length }}){% endif %} </a>
+      <a class="dropdown-item" href="{% url 'account' %}">Заказы</a>
+      <div class="dropdown-divider"></div>
+      <a class="dropdown-item" href="{% url 'logout' %}">Выйти</a>
+    </div>
+  </div>
   {% else %}
   <form  action="{% url 'login' %}">
     <button class="button" >Войти</button></form>

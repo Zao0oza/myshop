@@ -5,6 +5,7 @@ from django.db import models
 from djmoney.models.fields import MoneyField
 
 from django.urls import reverse
+from djmoney.models.validators import MinMoneyValidator
 from taggit.managers import TaggableManager
 from phonenumber_field.modelfields import PhoneNumberField
 
@@ -15,8 +16,8 @@ class Products(models.Model):
     description = models.TextField(blank=True, verbose_name='Описание')
     created_at = models.DateTimeField(auto_now=True, verbose_name='Опубликовано')
     photo = models.ImageField(upload_to='photo/%Y/%m/%d/', blank=True, verbose_name='Фото')
-    amount = models.PositiveSmallIntegerField(verbose_name='Кол-во', default=1)
-    price = MoneyField(default=0, max_digits=14, decimal_places=0, default_currency='RUB', verbose_name='Цена')
+    amount = models.PositiveSmallIntegerField(verbose_name='Кол-во', default=1,)
+    price = MoneyField(default=0, max_digits=14, decimal_places=0, default_currency='RUB', verbose_name='Цена',  validators=[MinMoneyValidator(0), ])
     # tags = models.ManyToManyField(Tag, blank=True, related_name='product')
     tags = TaggableManager()
 
@@ -56,12 +57,11 @@ class ImagesInline(models.Model):
 
 
 class Orders(models.Model):
-
     STATUS_NEW = 'new'
     STATUS_IN_PROGRESS = 'in_progress'
     STATUS_READY = 'is_ready'
     STATUS_COMPLETED = 'completed'
-    STATUS_IN_DELIVERY ='in_delivery'
+    STATUS_IN_DELIVERY = 'in_delivery'
     BUYING_TYPE_SELF = 'self'
     BUYING_TYPE_DELIVERY = 'delivery'
 
@@ -79,6 +79,7 @@ class Orders(models.Model):
     )
 
     email = models.EmailField()
+    #user = models.CharField(verbose_name='Пользователь', max_length=100, null=True, blank=True)
     user = models.ForeignKey(User, verbose_name='Пользователь', on_delete=models.CASCADE, null=True, blank=True)
     address = models.CharField("Address", max_length=1024)
     zip_code = models.CharField("ZIP", max_length=12)
@@ -86,7 +87,7 @@ class Orders(models.Model):
     phone_number = PhoneNumberField(verbose_name='Номер телефона', null=True, blank=True)
     ordered_at = models.DateTimeField(auto_now=True, verbose_name='заказ создан')
     delivered_at = models.DateTimeField(verbose_name='доставлен', default=timezone.now, null=True, blank=True)
-    payed = models.BooleanField(verbose_name='оплачен', default=False,null=True, blank=True)
+    payed = models.BooleanField(verbose_name='оплачен', default=False, null=True, blank=True)
     first_name = models.CharField(max_length=150, blank=True)
     last_name = models.CharField(max_length=150, blank=True)
     status = models.CharField(
@@ -114,9 +115,12 @@ class Orders(models.Model):
     def get_total_cost(self):
         return sum(item.get_cost() for item in self.items.all())
 
+    def get_absolute_url(self):
+        return reverse('order_detail', kwargs={'pk': self.pk})
+
 
 class OrderItem(models.Model):
-    order = models.ForeignKey(Orders, related_name='items', on_delete=models.PROTECT)
+    order = models.ForeignKey(Orders, related_name='items', on_delete=models.CASCADE)
     product = models.ForeignKey(Products, related_name='order_items', on_delete=models.PROTECT)
     price = models.DecimalField(max_digits=10, decimal_places=2)
     quantity = models.PositiveIntegerField(default=1)
@@ -126,4 +130,3 @@ class OrderItem(models.Model):
 
     def get_cost(self):
         return self.price * self.quantity
-

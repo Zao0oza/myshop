@@ -1,9 +1,42 @@
 {% extends "base.html" %}
 
+{% load order_item %}
 {% block title %}Thank you{% endblock %}
-
+{% load static %}
 {% block content %}
-    <h1>Thank you</h1>
-    <p>Your order has been successfully completed. Your order number is
-        <strong>{{ order.id }}</strong>.</p>
+{% show_orderitem order.id as orderitems  %}
+<link rel="stylesheet" href="{% static 'assets/css/order_created.css' %}">
+<div class="order">
+    <div class="card mt-50 mb-50">
+        <div class="col d-flex"><span class="text-muted" id="orderno">заказ #{{ order.id }}</span></div>
+        <div class="title mx-auto">Спасибо за ваш заказ! </div>
+        <div class="main"> <span id="sub-title">
+            <p><b>Состав заказа</b></p>
+        </span>
+            {% for orderitem in orderitems %}
+            <div class="row row-main">
+                {% if orderitem.product.photo %}
+                <div class="col-3"> <img class="img-fluid" src="{{ orderitem.product.photo.url }}"> </div>
+                {% endif %}
+                <div class="col-6">
+                    <div class="row d-flex">
+                        <p><b>{{ orderitem.product.name }}{% if orderitem.quantity > 1 %}(x{{ orderitem.quantity }}){% endif %}</b></p>
+                    </div>
+                </div>
+                <div class="col-3 d-flex justify-content-end">
+                    <p><b>{{ orderitem.product.price }}</b></p>
+                </div>
+            </div>
+            {% endfor %}
+            <hr>
+            <div class="total">
+                <div class="row">
+                    <div class="col"> <b> Итого:</b> </div>
+                    <div class="col d-flex justify-content-end"> <b>{{ order.get_total_cost }}</b> </div>
+                </div> <button id="track" class="btn d-flex mx-auto"> Подробнее </button>
+            </div>
+        </div>
+    </div>
+</div>
+
 {% endblock %}

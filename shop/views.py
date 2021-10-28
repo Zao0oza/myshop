@@ -127,7 +127,7 @@ def login_request(request):
         if form.is_valid():
             username = form.cleaned_data.get('username')
             password = form.cleaned_data.get('password')
-            if  request.session:
+            if request.session:
                 print(request.session['cart'])
             else:
                 pass
@@ -156,6 +156,9 @@ def order_create(request):
         form = OrderCreateForm(request.POST)
         if form.is_valid():
             order = form.save()
+            if request.user.is_authenticated:
+                order.user = request.user
+                order.save()
             for item in cart:
                 OrderItem.objects.create(order=order,
                                          product=item['product'],
@@ -169,3 +172,27 @@ def order_create(request):
         form = OrderCreateForm
     return render(request, 'shop/order_create.html',
                   {'cart': cart, 'form': form})
+
+
+class GetUserOrders(ListView):
+    model = Orders
+    template_name = 'shop/user_orders.html'
+    context_object_name = 'orders'
+
+    def get_context_data(self, *, object_list=None, **kwargs):
+        context = super().get_context_data(**kwargs)
+        return context
+
+    def get_queryset(self):
+        return Orders.objects.all().filter(user=self.request.user)
+
+
+class OrderDetailed(DetailView):
+    model = Orders
+    template_name = 'shop/order_detailed.html'
+    context_object_name = 'order'
+
+    def get_context_data(self, *, object_list=None, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['title'] = 'Заказ'
+        return context
