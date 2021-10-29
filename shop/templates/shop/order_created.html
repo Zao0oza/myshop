@@ -6,7 +6,7 @@
 {% block content %}
 {% show_orderitem order.id as orderitems  %}
 <link rel="stylesheet" href="{% static 'assets/css/order_created.css' %}">
-<div class="order">
+<div class="card-body">
     <div class="card mt-50 mb-50">
         <div class="col d-flex"><span class="text-muted" id="orderno">заказ #{{ order.id }}</span></div>
         <div class="title mx-auto">Спасибо за ваш заказ! </div>
@@ -24,7 +24,7 @@
                     </div>
                 </div>
                 <div class="col-3 d-flex justify-content-end">
-                    <p><b>{{ orderitem.product.price }}</b></p>
+                    <p><b>{{ orderitem.get_cost }}</b></p>
                 </div>
             </div>
             {% endfor %}
@@ -33,7 +33,11 @@
                 <div class="row">
                     <div class="col"> <b> Итого:</b> </div>
                     <div class="col d-flex justify-content-end"> <b>{{ order.get_total_cost }}</b> </div>
-                </div> <button id="track" class="btn d-flex mx-auto"> Подробнее </button>
+                    {% if user.is_authenticated %}
+                </div>
+                <form  action="{% url 'orders_list' %}">
+    <button type="submit" class="btn" >Подробнее</button></form>
+                {% endif %}
             </div>
         </div>
     </div>

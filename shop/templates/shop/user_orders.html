@@ -1,17 +1,15 @@
 {% extends "base.html" %}
 {% load order_item %}
-{% block title %}Thank you{% endblock %}
+{% block title %}Ваши заказы{% endblock %}
 {% load static %}
 {% block content %}
 <link rel="stylesheet" href="{% static 'assets/css/user_orders.css' %}">
-<h1>Ваши заказы</h1>
-
 <div class="orders-list">
     <div class="container mt-5">
         <table class="table table-borderless main">
             <thead>
             <tr class="head">
-                <th scope="col">Номер зазказа</th>
+                <th scope="col">Номер заказа</th>
                 <th scope="col">Размещен</th>
                 <th scope="col">Товары в заказе</th>
                 <th scope="col">Цена</th>

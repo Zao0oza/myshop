@@ -27,23 +27,21 @@
     </div>
   </div>
   {% if user.is_authenticated %}
-
-    <button class="button" >Выйти</button></form>
   <div class="btn-group">
-    <button type="button" class="btn btn-danger dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+    <button type="button" class="btn dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
       Профиль
     </button>
     <div class="dropdown-menu">
       <a class="dropdown-item" href="#">Мой профиль</a>
-      <a class="dropdown-item" href="">Корзина {% if cart|length != 0 %} ({{ cart|length }}){% endif %} </a>
-      <a class="dropdown-item" href="{% url 'account' %}">Заказы</a>
+      <a class="dropdown-item" href="{% if cart|length > 0  %}{% url 'cart:cart_detail' %}{% endif %}">Корзина {% if cart|length != 0 %} ({{ cart|length }}){% endif %} </a>
+      <a class="dropdown-item" href="{% url 'orders_list' %}">Заказы</a>
       <div class="dropdown-divider"></div>
       <a class="dropdown-item" href="{% url 'logout' %}">Выйти</a>
     </div>
   </div>
   {% else %}
   <form  action="{% url 'login' %}">
-    <button class="button" >Войти</button></form>
+    <button type="submit" class="btn" >Войти</button></form>
 
   {% endif %}
   <a  href="{% if cart|length > 0  %}{% url 'cart:cart_detail' %}{% endif %}" ><i class="fa"  id="lblCart" style="font-size:48px">&#xf07a;</i>

@@ -13,7 +13,7 @@ urlpatterns=[
     path("login", login_request, name="login"),
     path("logout", logout_request, name= "logout"),
     path('create/', order_create, name='order_create'),
-    path('account/', GetUserOrders.as_view(), name='account'),
-    path('order/<int:pk>/', OrderDetailed.as_view(), name='order_detail'),
+    path('account/orders/', GetUserOrders.as_view(), name='orders_list'),
+    path('account/order/<int:pk>/', OrderDetailed.as_view(), name='order_detail'),
 
 ]

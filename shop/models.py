@@ -58,8 +58,7 @@ class ImagesInline(models.Model):
 
 class Orders(models.Model):
     STATUS_NEW = 'new'
-    STATUS_IN_PROGRESS = 'in_progress'
-    STATUS_READY = 'is_ready'
+    STATUS_IN_PROGRESS = 'confirmed'
     STATUS_COMPLETED = 'completed'
     STATUS_IN_DELIVERY = 'in_delivery'
     BUYING_TYPE_SELF = 'self'
@@ -68,9 +67,8 @@ class Orders(models.Model):
     STATUS_CHOICES = (
         (STATUS_NEW, 'Заказ в обработке'),
         (STATUS_IN_PROGRESS, 'Заказ подтвержден'),
-        (STATUS_IN_DELIVERY, 'Передан службе доставки'),
-        (STATUS_READY, 'Заказ готов'),
-        (STATUS_COMPLETED, 'Заказ выполнен')
+        (STATUS_IN_DELIVERY, 'Передан в службу доставки'),
+        (STATUS_COMPLETED, 'Заказ доставлен')
     )
 
     BUYING_TYPE_CHOICES = (
@@ -81,9 +79,10 @@ class Orders(models.Model):
     email = models.EmailField()
     #user = models.CharField(verbose_name='Пользователь', max_length=100, null=True, blank=True)
     user = models.ForeignKey(User, verbose_name='Пользователь', on_delete=models.CASCADE, null=True, blank=True)
-    address = models.CharField("Address", max_length=1024)
-    zip_code = models.CharField("ZIP", max_length=12)
-    city = models.CharField("City", max_length=1024)
+    address = models.CharField("Адресс", max_length=1024)
+    zip_code = models.CharField("Почтовый индекс", max_length=20)
+    tracking_number = models.CharField("Номер отслеживания", max_length=12, null=True, blank=True)
+    city = models.CharField("Город", max_length=1024)
     phone_number = PhoneNumberField(verbose_name='Номер телефона', null=True, blank=True)
     ordered_at = models.DateTimeField(auto_now=True, verbose_name='заказ создан')
     delivered_at = models.DateTimeField(verbose_name='доставлен', default=timezone.now, null=True, blank=True)
@@ -102,7 +101,7 @@ class Orders(models.Model):
         choices=BUYING_TYPE_CHOICES,
         default=BUYING_TYPE_SELF
     )
-    comment = models.TextField(verbose_name='Комментарий к заказу', null=True, blank=True)
+    comment = models.TextField(max_length=255,verbose_name='Комментарий к заказу', null=True, blank=True)
 
     class Meta:
         ordering = ('-ordered_at',)

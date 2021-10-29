@@ -98,7 +98,7 @@ hr {
     }
 }
 
-body > div.card.mt-50.mb-50 > div.main > div.total > button {
+body > div.card-body > div > div.main > div > form > button {
     margin: 7vh 0;
     border-radius: 7px;
     width: 60%;
