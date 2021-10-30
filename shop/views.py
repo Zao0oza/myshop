@@ -178,6 +178,7 @@ class GetUserOrders(ListView):
     model = Orders
     template_name = 'shop/user_orders.html'
     context_object_name = 'orders'
+    paginate_by = 10
 
     def get_context_data(self, *, object_list=None, **kwargs):
         context = super().get_context_data(**kwargs)

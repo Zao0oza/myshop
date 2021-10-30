@@ -79,7 +79,7 @@ class Orders(models.Model):
     email = models.EmailField()
     #user = models.CharField(verbose_name='Пользователь', max_length=100, null=True, blank=True)
     user = models.ForeignKey(User, verbose_name='Пользователь', on_delete=models.CASCADE, null=True, blank=True)
-    address = models.CharField("Адресс", max_length=1024)
+    address = models.CharField("Адрес", max_length=1024)
     zip_code = models.CharField("Почтовый индекс", max_length=20)
     tracking_number = models.CharField("Номер отслеживания", max_length=12, null=True, blank=True)
     city = models.CharField("Город", max_length=1024)
@@ -87,8 +87,8 @@ class Orders(models.Model):
     ordered_at = models.DateTimeField(auto_now=True, verbose_name='заказ создан')
     delivered_at = models.DateTimeField(verbose_name='доставлен', default=timezone.now, null=True, blank=True)
     payed = models.BooleanField(verbose_name='оплачен', default=False, null=True, blank=True)
-    first_name = models.CharField(max_length=150, blank=True)
-    last_name = models.CharField(max_length=150, blank=True)
+    first_name = models.CharField(verbose_name='Имя', max_length=150, blank=True)
+    last_name = models.CharField(verbose_name='Фамилия',max_length=150, blank=True)
     status = models.CharField(
         max_length=100,
         verbose_name='Статус заказ',

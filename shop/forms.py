@@ -17,6 +17,11 @@ class OrderCreateForm(forms.ModelForm):
             'user': forms.HiddenInput(),
         }
 
+    def __init__(self, *args, **kwargs):
+        super(OrderCreateForm, self).__init__(*args, **kwargs)
+        for field in self:
+            field.field.widget.attrs['class'] ="form-control"
+
 
 class ContactForm(forms.Form):
     subject = forms.CharField(label='Тема', widget=forms.TextInput(attrs={'class': 'form-control'}))

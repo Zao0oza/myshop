@@ -1,10 +1,10 @@
 {% extends "base.html" %}
 
 {% load order_item %}
-{% block title %}Thank you{% endblock %}
+{% block title %}Спасибо за ваш заказ!{% endblock %}
 {% load static %}
 {% block content %}
-{% show_orderitem order.id as orderitems  %}
+
 <link rel="stylesheet" href="{% static 'assets/css/order_created.css' %}">
 <div class="card-body">
     <div class="card mt-50 mb-50">
