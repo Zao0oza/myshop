@@ -112,7 +112,7 @@ class Orders(models.Model):
         return '{}'.format(self.id)
 
     def get_total_cost(self):
-        return sum(item.get_cost() for item in self.items.all())
+        return sum(item.get_cost() for item in self.items.all())+300
 
     def get_absolute_url(self):
         return reverse('order_detail', kwargs={'pk': self.pk})

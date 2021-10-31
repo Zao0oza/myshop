@@ -9,10 +9,10 @@ class Cart(object):
         '''
         Инициализация корзины
         '''
-        self.session=request.session
-        cart=self.session.get('cart')
+        self.session = request.session
+        cart = self.session.get('cart')
         if not cart:
-            #сохраняем пустую корзину в сессии
+            # сохраняем пустую корзину в сессии
             cart = self.session['cart'] = {}
         self.cart = cart
 
@@ -29,7 +29,6 @@ class Cart(object):
             cart[str(product.id)]['product'] = product
 
         for item in cart.values():
-
             item['total_price'] = Decimal(item['price']) * item['quantity']
             yield item
 
@@ -68,10 +67,13 @@ class Cart(object):
 
     def get_total_price(self):
         for item in self.cart.values():
-
             item['total_price'] = Decimal(item['price']) * item['quantity']
         # получаем общую стоимость
         return sum(item['total_price'] for item in self.cart.values())
+
+    def get_total_delivery_price(self):
+        delivery_price = 300
+        return self.get_total_price() + delivery_price
 
     def clear(self):
         # очищаем корзину в сессии

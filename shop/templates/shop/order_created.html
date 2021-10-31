@@ -13,6 +13,7 @@
         <div class="main"> <span id="sub-title">
             <p><b>Состав заказа</b></p>
         </span>
+            {% show_orderitem order.id as orderitems  %}
             {% for orderitem in orderitems %}
             <div class="row row-main">
                 {% if orderitem.product.photo %}
@@ -30,6 +31,10 @@
             {% endfor %}
             <hr>
             <div class="total">
+                <div class="row">
+                    <div class="col">Доставка</div>
+                    <div class="col d-flex justify-content-end">300 &#x20bd</div>
+                </div>
                 <div class="row">
                     <div class="col"> <b> Итого:</b> </div>
                     <div class="col d-flex justify-content-end"> <b>{{ order.get_total_cost }}</b> </div>

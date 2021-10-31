@@ -165,9 +165,10 @@ def order_create(request):
                                          price=item['price'],
                                          quantity=item['quantity'])
             # очистка корзины
+            cart_template=cart.save()
             cart.clear()
             return render(request, 'shop/order_created.html',
-                          {'order': order})
+                          {'order': order, 'cart': cart_template})
     else:
         form = OrderCreateForm
     return render(request, 'shop/order_create.html',

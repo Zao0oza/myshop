@@ -17,8 +17,11 @@ nav div.ml-auto a {
     text-decoration: none;
     font-weight: 600;
     font-size: 0.8rem
-}
 
+}
+price {
+    content: ' \20BD';
+  }
 header {
     padding: 20px 0px
 }
@@ -59,6 +62,10 @@ header .active .fa-check {
     padding: 30px 50px;
     min-height: 300px
 }
+
+  .product .product-line-price:before {
+    content: ' \20BD';
+  }
 
 input {
     border: none;

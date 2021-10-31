@@ -5,18 +5,6 @@
 {% block content %}
 <link rel="stylesheet" href="{% static 'assets/css/order_create.css' %}">
 <h1>Checkout</h1>
-<div class="order-info">
-    <h3>Your order</h3>
-    <ul>
-        {% for item in cart %}
-        <li>
-            {{ item.quantity }}x {{ item.product.name }}
-            <span>${{ item.total_price }}</span>
-        </li>
-        {% endfor %}
-    </ul>
-    <p>Total: ${{ cart.get_total_price }}</p>
-</div>
 <form action="." method="post" class="order-form">
     <nav class="bg-white">
         <div class="d-flex align-items-center">
@@ -24,8 +12,6 @@
         </div>
     </nav>
     <header>
-        <div class="progress-bar bg-success" role="progressbar" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100"></div>
-        </div>
     </header>
     <div class="wrapper">
         <div class="h5 large">Адресс доставки</div>
@@ -33,15 +19,18 @@
             <div class="col-lg-6 col-md-8 col-sm-10 offset-lg-0 offset-md-2 offset-sm-1">
                 <div class="mobile h5">Адресс доставки</div>
                 <div id="details" class="bg-white rounded pb-5">
-                    <form>
+                    <form method="post" >
+                        {% csrf_token %}
                         {{ form.non_field_errors }}
-
                         <div class="form-group">
                             {{ form.first_name.errors }}
                             <label  class="text-muted">{{ form.first_name.label_tag }}</label> {{ form.first_name }}</div>
                         <div class="form-group">
                             {{ form.last_name.errors }}
                             <label  class="text-muted">{{ form.last_name.label_tag }}</label> {{ form.last_name }}</div>
+                        <div class="form-group">
+                            {{ form.phone_number.errors }}
+                            <label  class="text-muted">{{ form.phone_number.label_tag }}</label> {{ form.phone_number }}</div>
                         <div class="form-group">{{ form.email.errors }} <label class="text-muted">{{ form.email.label_tag }}</label>
                             <div class=text-muted"> {{ form.email }} </div>
                         </div>
@@ -57,88 +46,44 @@
                                 </div>
                             </div>
                         </div>
-
                         <div class="form-group">
                             <div class="form-group">{{ form.address.errors }} <label class="text-muted">{{ form.address.label_tag }}</label>
                                 <div class=text-muted"> {{ form.address }} </div>
                             </div>
                         </div>
-
-                </div> <input type="checkbox" checked> <label>Shipping address is same as billing</label>
-                <div id="address" class="bg-light rounded mt-3">
-                    <div class="h5 font-weight-bold text-primary"> Shopping Address </div>
-                    <div class="d-md-flex justify-content-md-start align-items-md-center pt-3">
-                        <div class="mr-auto"> <b>Home Address</b>
-                            <p class="text-justify text-muted">542 W.14th Street</p>
-                            <p class="text-uppercase text-muted">NY</p>
-                        </div>
-                        <div class="rounded py-2 px-3" id="register"> <a href="#"> <b>Register Now</b> </a>
-                            <p class="text-muted">Create account to have multiple address saved</p>
-                        </div>
-                    </div>
+                        {% csrf_token %}
+                    </form>
                 </div>
             </div>
             <div class="col-lg-6 col-md-8 col-sm-10 offset-lg-0 offset-md-2 offset-sm-1 pt-lg-0 pt-3">
                 <div id="cart" class="bg-white rounded">
                     <div class="d-flex justify-content-between align-items-center">
-                        <div class="h6">Cart Summary</div>
-                        <div class="h6"> <a href="#">Edit</a> </div>
+                        <div class="h6">Ваш заказ</div>
+                        <div class="h6"> <a href="{% url 'cart:cart_detail' %}">Изменить</a> </div>
                     </div>
                     <div class="d-flex jusitfy-content-between align-items-center pt-3 pb-2 border-bottom">
-                        <div class="item pr-2"> <img src="https://images.unsplash.com/photo-1569488859134-24b2d490f23f?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=500&q=60" alt="" width="80" height="80">
-                            <div class="number">2</div>
+                        {% for item in cart %}
+                        <div class="item pr-2"> <img src="{{ item.product.photo.url }}" alt="" width="80" height="80">
+                            <div class="number">{{ item.quantity }}</div>
                         </div>
-                        <div class="d-flex flex-column px-3"> <b class="h5">BattleCreek Coffee</b> <a href="#" class="h5 text-primary">C-770</a> </div>
-                        <div class="ml-auto"> <b class="h5">$80.9</b> </div>
+                        <div class="d-flex flex-column px-3"> <b class="h5">{{ item.product.name }}</b> <a href="#" class="h5 text-primary">C-770</a> </div>
+                        <div class="ml-auto" > <b class="h5">{{ item.total_price }} &#x20bd</b> </div>
                     </div>
-                    <div class="my-3"> <input type="text" class="w-100 form-control text-center" placeholder="Gift Card or Promo Card"> </div>
+                    <br>
                     <div class="d-flex align-items-center">
-                        <div class="display-5">Subtotal</div>
-                        <div class="ml-auto font-weight-bold">$80.9</div>
+                        {% endfor %}
+                        <div class="display-5">Цена</div>
+                        <div class="ml-auto font-weight-bold">{{ cart.get_total_price }} &#x20bd</div>
                     </div>
                     <div class="d-flex align-items-center py-2 border-bottom">
-                        <div class="display-5">Shipping</div>
-                        <div class="ml-auto font-weight-bold">$12.9</div>
+                        <div class="display-5">Доставка</div>
+                        <div class="ml-auto font-weight-bold">300 &#x20bd</div>
                     </div>
                     <div class="d-flex align-items-center py-2">
-                        <div class="display-5">Total</div>
+                        <div class="display-5">Всего</div>
                         <div class="ml-auto d-flex">
-                            <div class="text-primary text-uppercase px-3">usd</div>
-                            <div class="font-weight-bold">$92.98</div>
+                            <div class="font-weight-bold">{{ cart.get_total_delivery_price }} &#x20bd</div>
                         </div>
-                    </div>
-                </div>
-                <p class="text-muted">Need help with an order?</p>
-                <p class="text-muted"><a href="#" class="text-danger">Hotline:</a>+314440160 (International)</p>
-                <div class="h4 pt-3"> <span class="fas fa-shield-alt text-primary pr-2"></span> Security of your shopping</div>
-                <div id="summary" class="bg-white rounded py-2 my-4">
-                    <div class="table-responsive">
-                        <table class="table table-borderless w-75">
-                            <tbody>
-                            <tr class="text-muted">
-                                <td>Battlecreek Coffee</td>
-                                <td>:</td>
-                                <td>$80.9</td>
-                            </tr>
-                            <tr class="text-muted">
-                                <td>Code-770</td>
-                                <td>:</td>
-                                <td>770</td>
-                            </tr>
-                            <tr class="text-muted">
-                                <td>Quantity</td>
-                                <td>:</td>
-                                <td>
-                                    <div class="d-flex align-items-center"> <span class="fas fa-minus btn text-muted"></span> <span>2</span> <span class="fas fa-plus btn text-muted"></span> </div>
-                                </td>
-                            </tr>
-                            </tbody>
-                        </table>
-                    </div>
-                    <div class="border-top py-2 d-flex align-items-center ml-2 font-weight-bold">
-                        <div>Total</div>
-                        <div class="ml-auto text-primary">USD</div>
-                        <div class="px-2">$92.98</div>
                     </div>
                 </div>
                 <div class="row pt-lg-3 pt-2 buttons mb-sm-0 mb-2">
@@ -148,11 +93,11 @@
                     </div>
                     <div class="col-md-6 pt-md-0 pt-3">
                         <button class="button">Оформить</button>
+                        {% csrf_token %}
                     </div>
                 </div>
             </div>
         </div>
-        <div class="text-muted"> <span class="fas fa-lock"></span> Your information is save </div>
     </div>
     {% csrf_token %}
 </form>

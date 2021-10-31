@@ -55,11 +55,11 @@
         </div>
         <div class="totals-item">
             <label>Доставка</label>
-            <div class="totals-value" id="cart-shipping">15</div>
+            <div class="totals-value" id="cart-shipping">300</div>
         </div>
         <div class="totals-item totals-item-total">
             <label>Общая стоимость</label>
-            <div class="totals-value" id="cart-total">{{ cart.get_total_price|add:'15' }}</div>
+            <div class="totals-value" id="cart-total">{{ cart.get_total_price }}</div>
         </div>
     </div>
     <form action="{% url 'order_create' %}">
