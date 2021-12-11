@@ -489,6 +489,8 @@ color: #1e1e1e
 
 
 button {
+    margin-top: 10px;
+    margin-down: 10px;
 	margin-left: 15px;
 	cursor: pointer;
 	background-color: #ff5400;

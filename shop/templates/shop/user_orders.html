@@ -3,44 +3,88 @@
 {% block title %}Ваши заказы{% endblock %}
 {% load static %}
 {% block content %}
-<link rel="stylesheet" href="{% static 'assets/css/user_orders.css' %}">
-<div class="orders-list">
-    <div class="container mt-5">
-        <table class="table table-borderless main">
-            <thead>
-            <tr class="head">
-                <th scope="col">Номер заказа</th>
-                <th scope="col">Размещен</th>
-                <th scope="col">Товары в заказе</th>
-                <th scope="col">Цена</th>
-                <th scope="col">Статус</th>
-            </tr>
-            </thead>
-            {% if orders %}
-            {% for order in orders %}
 
-            {% show_orderitem order.id as orderitems  %}
-            <tbody>
-            <tr class="rounded bg-white">
-                <td  class="order-color" ><a href="{{ order.get_absolute_url }}">{{ order.id }}</a></td>
-                <td>{{ order.ordered_at|date:"d M, Y" }}</td>
-                <td>
-                    <ul class="list-group" >
-                        {% for orderitem in orderitems %}
-                        <li><a class="dropdown-item" href="{{ orderitem.product.get_absolute_url }}">{{ orderitem.product.name }}{% if orderitem.quantity > 1 %}(x{{ orderitem.quantity }}){% endif %}</a></li>
-                        {% endfor %}
-                    </ul>
-                </td>
-                <td>{{ order.get_total_cost  }}</td>
-                <td>{{ order.get_status_display}}</td>
-            </tr>
-            {% endfor %}
-            {% else %}
-            {% endif %}
-            </tbody>
-        </table>
+<link rel="stylesheet" href="{% static 'assets/css/user_orders.css' %}">
+
+
+
+<div class="container">
+    <div class="row">
+        <section class="content">
+            <div class="col-md">
+                <div class="panel panel-default">
+                    <div class="panel-body">
+                        <div class="pull-right">
+                            <div class="btn-group"> <button type="button" class="btn btn-success btn-filter" data-target="active">Активные</button> <button type="button" class="btn btn-warning btn-filter" data-target="completed">Завершенные</button>  <button type="button" class="btn btn-default btn-filter" data-target="all">Все</button></div>
+                        </div>
+                        <div class="table-container">
+                            <table class="table table-filter">
+                                <tbody>
+                                <div class="wrapper">
+                                    <div class="orders-list">
+                                        <div class="container mt-5">
+                                            <table class="table table-borderless main">
+                                                {% if orders %}
+                                                {% for order in orders %}
+                                                {% show_orderitem order.id as orderitems  %}
+                                                {% if order.order_completed is True %}
+                                                <tbody>
+                                                <tr  data-status="active" class="rounded bg-white">
+                                                    <td  class="order-color" ><a href="{{ order.get_absolute_url }}">{{ order.id }}</a></td>
+                                                    <td><b>Размещен:</b>
+                                                        {{ order.ordered_at|date:"d M, Y" }}</td>
+                                                    <td>
+                                                        <ul class="list-group" >
+                                                            <b>Товары в заказе:</b>
+                                                            {% for orderitem in orderitems %}
+                                                            <li><a class="dropdown-item" href="{{ orderitem.product.get_absolute_url }}">
+                                                                {{ orderitem.product.name }}{% if orderitem.quantity > 1 %}(x{{ orderitem.quantity }}){% endif %}</a></li>
+                                                            {% endfor %}
+                                                        </ul>
+                                                    </td>
+                                                    <td><b>Цена:</b>
+                                                        {{ order.get_total_cost  }} &#x20bd</td>
+                                                    <td><b>Статус:</b>
+                                                        {{ order.get_status_display}} </td>
+                                                </tr>
+                                                {% else %}
+                                                <tr  data-status="completed" class="rounded bg-white">
+                                                    <td  class="order-color" ><a href="{{ order.get_absolute_url }}">{{ order.id }}</a></td>
+                                                    <td><b>Размещен:</b>
+                                                        {{ order.ordered_at|date:"d M, Y" }}</td>
+                                                    <td>
+                                                        <ul class="list-group" >
+                                                            <b>Товары в заказе:</b>
+                                                            {% for orderitem in orderitems %}
+                                                            <li><a class="dropdown-item" href="{{ orderitem.product.get_absolute_url }}">
+                                                                {{ orderitem.product.name }}{% if orderitem.quantity > 1 %}(x{{ orderitem.quantity }}){% endif %}</a></li>
+                                                            {% endfor %}
+                                                        </ul>
+                                                    </td>
+                                                    <td><b>Цена:</b>
+                                                        {{ order.get_total_cost  }} &#x20bd</td>
+                                                    <td><b>Статус:</b>
+                                                        {{ order.get_status_display}} </td>
+                                                </tr>
+                                                {% endif %}
+                                                {% endfor %}
+                                                {% else %}
+                                                {% endif %}
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                    </div>
+                                </div>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
     </div>
 </div>
-{% include 'inc/_pagination.html' %}
+
 <script src="{% static 'vendor/bootstrap/js/bootstrap.bundle.min.js' %}"></script>
+
 {% endblock %}

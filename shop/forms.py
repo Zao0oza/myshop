@@ -5,14 +5,13 @@ from django.contrib.auth.forms import UserCreationForm
 from django.contrib import admin
 from django.contrib.auth.models import User
 
-
 from .models import Orders
 
 
 class OrderCreateForm(forms.ModelForm):
     class Meta:
         model = Orders
-        fields = ['first_name', 'last_name', 'email', 'address', 'zip_code', 'city','phone_number', 'user']
+        fields = ['first_name', 'last_name', 'email', 'address', 'zip_code', 'city', 'phone_number', 'user']
         widgets = {
             'user': forms.HiddenInput(),
         }
@@ -20,7 +19,7 @@ class OrderCreateForm(forms.ModelForm):
     def __init__(self, *args, **kwargs):
         super(OrderCreateForm, self).__init__(*args, **kwargs)
         for field in self:
-            field.field.widget.attrs['class'] ="form-control"
+            field.field.widget.attrs['class'] = "form-control"
 
 
 class ContactForm(forms.Form):

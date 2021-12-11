@@ -179,14 +179,14 @@ class GetUserOrders(ListView):
     model = Orders
     template_name = 'shop/user_orders.html'
     context_object_name = 'orders'
-    paginate_by = 10
+
 
     def get_context_data(self, *, object_list=None, **kwargs):
         context = super().get_context_data(**kwargs)
         return context
 
     def get_queryset(self):
-        return Orders.objects.all().filter(user=self.request.user)
+        return Orders.objects.all().filter(user=self.request.user).order_by('-order_completed', 'ordered_at')
 
 
 class OrderDetailed(DetailView):

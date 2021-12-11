@@ -17,7 +17,7 @@
                     <div class="col"> <strong>Адрес доставки:</strong> <br> {{ order.city }}, |{{ order.address }} <br> <i class="fa fa-phone"></i> {{ order.phone_number }} </div>
                     <div class="col"> <strong>Статус:</strong> <br> {{ order.get_status_display }} </div>
                     <div class="col"> <strong>Номер отслеживания:</strong> <br> {{ order.tracking_number|default_if_none:""  }} </div>
-                    <div class="col"> <strong>Комментарий к заказу:</strong> <br>{{ order.comment }} </div>
+                    <div class="col"> <strong>Комментарий к заказу:</strong> <br>{{ order.comment|default_if_none:"" }} </div>
                 </div>
 
             </article>

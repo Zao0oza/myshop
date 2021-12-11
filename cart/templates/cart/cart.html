@@ -9,7 +9,7 @@
 
 <link rel="stylesheet" href="{% static 'assets/css/basket.css' %}">
 
-<h1>Shopping Cart</h1>
+<h1>Корзина</h1>
 
 <div class="shopping-cart">
 
@@ -34,8 +34,15 @@
             <div class="product-title">{{ product.name }}</div>
         </div>
         <div class="product-price">{{ item.price }}</div>
-        <div class="product-quantity">
+        <form action="{% url 'cart:cart_add' product.id %}" method="post">
+        <div class="product-quantity" id="{{ product.id }}">
+
             {{ item.update_quantity_form.quantity }}
+            {{ item.update_quantity_form.update }}
+            <input type="submit" id=button style="display: none;">
+            {% csrf_token %}
+          </form>
+
         </div>
         <div class="product-removal">
             <a href="{% url 'cart:cart_remove' product.id %}">
@@ -48,6 +55,7 @@
     </div>
     {% endwith %}
     {% endfor %}
+
     <div class="totals">
         <div class="totals-item">
             <label>Цена</label>
@@ -59,7 +67,7 @@
         </div>
         <div class="totals-item totals-item-total">
             <label>Общая стоимость</label>
-            <div class="totals-value" id="cart-total">{{ cart.get_total_price }}</div>
+            <div class="totals-value" id="cart-total">{{ cart.get_total_delivery_price }}</div>
         </div>
     </div>
     <form action="{% url 'order_create' %}">

@@ -4,6 +4,7 @@ from django.contrib.auth.models import User
 from django.db import models
 from djmoney.models.fields import MoneyField
 
+
 from django.urls import reverse
 from djmoney.models.validators import MinMoneyValidator
 from taggit.managers import TaggableManager
@@ -16,8 +17,9 @@ class Products(models.Model):
     description = models.TextField(blank=True, verbose_name='Описание')
     created_at = models.DateTimeField(auto_now=True, verbose_name='Опубликовано')
     photo = models.ImageField(upload_to='photo/%Y/%m/%d/', blank=True, verbose_name='Фото')
-    amount = models.PositiveSmallIntegerField(verbose_name='Кол-во', default=1,)
-    price = MoneyField(default=0, max_digits=14, decimal_places=0, default_currency='RUB', verbose_name='Цена',  validators=[MinMoneyValidator(0), ])
+    amount = models.PositiveSmallIntegerField(verbose_name='Кол-во', default=1, )
+    price = MoneyField(default=0, max_digits=14, decimal_places=0, default_currency='RUB', verbose_name='Цена',
+                       validators=[MinMoneyValidator(0), ])
     # tags = models.ManyToManyField(Tag, blank=True, related_name='product')
     tags = TaggableManager()
 
@@ -33,8 +35,7 @@ class Products(models.Model):
         return reverse('product', kwargs={'slug': self.slug})
 
 
-class ContentFor(
-    models.Model):  # класс создан для удобного заполнения страницы обо мне контентом через ckeditor, запрос по slug
+class ContentFor( models.Model):  # класс создан для удобного заполнения страницы обо мне контентом через ckeditor, запрос по slug
     title = models.CharField(max_length=50, verbose_name='Название')
     content = models.TextField(blank=True, verbose_name='Контент')
     slug = models.SlugField(max_length=50, verbose_name='Url', unique=True)  #
@@ -77,7 +78,6 @@ class Orders(models.Model):
     )
 
     email = models.EmailField()
-    #user = models.CharField(verbose_name='Пользователь', max_length=100, null=True, blank=True)
     user = models.ForeignKey(User, verbose_name='Пользователь', on_delete=models.CASCADE, null=True, blank=True)
     address = models.CharField("Адрес", max_length=1024)
     zip_code = models.CharField("Почтовый индекс", max_length=20)
@@ -88,7 +88,7 @@ class Orders(models.Model):
     delivered_at = models.DateTimeField(verbose_name='доставлен', default=timezone.now, null=True, blank=True)
     payed = models.BooleanField(verbose_name='оплачен', default=False, null=True, blank=True)
     first_name = models.CharField(verbose_name='Имя', max_length=150, blank=True)
-    last_name = models.CharField(verbose_name='Фамилия',max_length=150, blank=True)
+    last_name = models.CharField(verbose_name='Фамилия', max_length=150, blank=True)
     status = models.CharField(
         max_length=100,
         verbose_name='Статус заказ',
@@ -101,7 +101,8 @@ class Orders(models.Model):
         choices=BUYING_TYPE_CHOICES,
         default=BUYING_TYPE_SELF
     )
-    comment = models.TextField(max_length=255,verbose_name='Комментарий к заказу', null=True, blank=True)
+    comment = models.TextField(max_length=255, verbose_name='Комментарий к заказу', null=True, blank=True)
+    order_completed= models.BooleanField(default=0, verbose_name='Выполнен')# заказ активный или выполненный
 
     class Meta:
         ordering = ('-ordered_at',)
@@ -112,7 +113,7 @@ class Orders(models.Model):
         return '{}'.format(self.id)
 
     def get_total_cost(self):
-        return sum(item.get_cost() for item in self.items.all())+300
+        return sum(item.get_cost() for item in self.items.all()) + 300
 
     def get_absolute_url(self):
         return reverse('order_detail', kwargs={'pk': self.pk})
@@ -129,3 +130,5 @@ class OrderItem(models.Model):
 
     def get_cost(self):
         return self.price * self.quantity
+
+

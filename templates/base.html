@@ -9,6 +9,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
   <meta name="description" content="">
   <meta name="author" content="">
+  <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.13.0/css/all.css">
   <link href="https://fonts.googleapis.com/css?family=Roboto:100,300,400,500,700" rel="stylesheet">
 
   <title>{% block title %} moli_zhongguo {% endblock %}</title>
@@ -58,61 +59,27 @@
 
 <!-- Subscribe Form Starts Here -->
 <div class="subscribe-form">
-  <div class="container">
-    <div class="row">
-      <div class="col-md-12">
-        <div class="section-heading">
-          <div class="line-dec"></div>
-          <h1>Subscribe on PIXIE now!</h1>
-        </div>
-      </div>
-      <div class="col-md-8 offset-md-2">
-        <div class="main-content">
-          <p>Integer vel turpis ultricies, lacinia ligula id, lobortis augue. Vivamus porttitor dui id dictum efficitur. Phasellus vel interdum elit.</p>
-          <div class="container">
-            <form id="subscribe" action="" method="get">
-              <div class="row">
-                <div class="col-md-7">
-                  <fieldset>
-                    <input name="email" type="text" class="form-control" id="email"
-                           onfocus="if(this.value == 'Your Email...') { this.value = ''; }"
-                           onBlur="if(this.value == '') { this.value = 'Your Email...';}"
-                           value="Your Email..." required="">
-                  </fieldset>
-                </div>
-                <div class="col-md-5">
-                  <fieldset>
-                    <button type="submit" id="form-submit" class="button">Subscribe Now!</button>
-                  </fieldset>
-                </div>
-              </div>
-            </form>
-          </div>
-        </div>
-      </div>
-    </div>
-  </div>
+
 </div>
 <!-- Subscribe Form Ends Here -->
 
 
-
 <!-- Footer Starts Here -->
-<div class="footer">
-  <div class="container">
+<div class="footer" style="background-color:white;">
+    <div class="container">
     <div class="row">
       <div class="col-md-12">
         <div class="logo">
-          <img src="assets/images/header-logo.png" alt="">
+          <img src='{% static "assets/images/header-logo.png" %}' alt="">
         </div>
       </div>
       <div class="col-md-12">
         <div class="footer-menu">
           <ul>
-            <li><a href="#">Главная</a></li>
-            <li><a href="#">Помощь</a></li>
+            <li><a href="{% url 'home' %}">Главная</a></li>
+            <li><a href="/about">Обо мне</a></li>
             <li><a href="#">Политика Конфиденциальности</a></li>
-            <li><a href="#">Контакты</a></li>
+            <li><a href="{% url 'feedback' %}">Контакты</a></li>
           </ul>
         </div>
       </div>
@@ -164,7 +131,7 @@
 <script src="{% static 'assets/js/owl.js' %}"></script>
 <script src="{% static 'assets/js/isotope.js' %}"></script>
 <script src="{% static 'assets/js/flex-slider.js' %}"></script>
-
+<script src="{% static 'assets/js/user-orders.js' %}"></script>
 
 <script language = "text/Javascript">
       cleared[0] = cleared[1] = cleared[2] = 0; //set a cleared flag for each field

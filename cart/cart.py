@@ -38,6 +38,11 @@ class Cart(object):
         """
         return sum(item['quantity'] for item in self.cart.values())
 
+    def update(self, product, quantity=1):
+        product_id = str(product.id)
+        self.cart[product_id]['quantity'] = quantity
+        self.save()
+
     def add(self, product, quantity=1, update_quantity=False):
         """
         Добавляем товар в корзину или обновляем его количество.

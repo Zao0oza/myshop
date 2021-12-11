@@ -13,29 +13,25 @@
       <div class="col-md-4 col-sm-12">
         <div class="section-heading">
           <div class="line-dec"></div>
-          <h1>Featured Items</h1>
+          <h1>Товары</h1>
         </div>
       </div>
       <div class="col-md-8 col-sm-12">
         <form action="" method="GET">
           <div id="filters" class="button-group">
             {% csrf_token %}
-
-            <button class="btn btn-primary" name="all" >All Products</button>
-            <button class="btn btn-primary" name="new">Newest</button>
-            <button class="btn btn-primary" name="low">Low Price</button>
-            <button class="btn btn-primary" name="high">Hight Price</button>
-        </form>
+            <button class="btn btn-primary"   name="new">Новинки</button>
+            <button class="btn btn-primary" name="low" >Цена минимум<i class='fas fa-angle-up'></i></button>
+            <button class="btn btn-primary" name="high">Цена максимум<i class='fas fa-angle-down'></i></button>
+        </div></form>
       </div>
       </div>
     </div>
   </div>
-</div>
-
 <div class="featured container no-gutter">
   <div class="row posts">
     {% for post in posts %}
-    <div id="1" class="item new col-md-4">
+    <div  class="item new col-md-4">
       <a href="{{ post.get_absolute_url }}">
         <div class="featured-item">
           {% if post.photo %}
@@ -53,4 +49,5 @@
   </div>
 </div>
 {% include 'inc/_pagination.html' %}
+<script src="{% static 'assets/js/sort.js' %}"></script>
 {% endblock %}
