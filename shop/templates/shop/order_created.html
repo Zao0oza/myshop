@@ -1,6 +1,6 @@
 {% extends "base.html" %}
 
-{% load order_item %}
+{% load special_tags %}
 {% block title %}Спасибо за ваш заказ!{% endblock %}
 {% load static %}
 {% block content %}
@@ -37,7 +37,7 @@
                 </div>
                 <div class="row">
                     <div class="col"> <b> Итого:</b> </div>
-                    <div class="col d-flex justify-content-end"> <b>{{ order.get_total_cost }}</b> </div>
+                    <div class="col d-flex justify-content-end"> <b>{{ order.get_total_cost }}  &#x20bd</b> </div>
                     {% if user.is_authenticated %}
                 </div>
                 <form  action="{% url 'orders_list' %}">

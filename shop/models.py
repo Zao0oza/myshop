@@ -7,11 +7,26 @@ from djmoney.models.fields import MoneyField
 
 from django.urls import reverse
 from djmoney.models.validators import MinMoneyValidator
-from taggit.managers import TaggableManager
 from phonenumber_field.modelfields import PhoneNumberField
 
 
-class Products(models.Model):
+class Tag(models.Model):
+    title = models.CharField(max_length=50, verbose_name='Тэг')
+    slug = models.SlugField(max_length=50, verbose_name='Url', unique=True)
+
+    def __str__(self):
+        return self.title
+
+    def get_absolute_url(self):
+        return reverse('tag', kwargs={'slug': self.slug})
+
+    class Meta:
+        verbose_name = 'Тег'
+        verbose_name_plural = 'Теги'
+        ordering = ['title']
+
+
+class Products(models.Model): # класс описывающий товар
     name = models.CharField(max_length=255, verbose_name='Название')
     slug = models.SlugField(max_length=255, verbose_name='Url', unique=True)
     description = models.TextField(blank=True, verbose_name='Описание')
@@ -20,8 +35,7 @@ class Products(models.Model):
     amount = models.PositiveSmallIntegerField(verbose_name='Кол-во', default=1, )
     price = MoneyField(default=0, max_digits=14, decimal_places=0, default_currency='RUB', verbose_name='Цена',
                        validators=[MinMoneyValidator(0), ])
-    # tags = models.ManyToManyField(Tag, blank=True, related_name='product')
-    tags = TaggableManager()
+    tags = models.ManyToManyField(Tag, blank=True, related_name='products')
 
     def __str__(self):
         return self.name
@@ -52,12 +66,12 @@ class ContentFor( models.Model):  # класс создан для удобно�
         ordering = ['title']
 
 
-class ImagesInline(models.Model):
+class ImagesInline(models.Model): #класс для загрузки изображения продукта
     products = models.ForeignKey(Products, default=None, on_delete=models.PROTECT, related_name='image')
     image = models.ImageField(upload_to='photo/%Y/%m/%d/', blank=True)
 
 
-class Orders(models.Model):
+class Orders(models.Model): # класс заказов
     STATUS_NEW = 'new'
     STATUS_IN_PROGRESS = 'confirmed'
     STATUS_COMPLETED = 'completed'
@@ -112,14 +126,14 @@ class Orders(models.Model):
     def __str__(self):
         return '{}'.format(self.id)
 
-    def get_total_cost(self):
+    def get_total_cost(self): # функция считает полную цену товаров в заказе плюс стоимость доставки
         return sum(item.get_cost() for item in self.items.all()) + 300
 
     def get_absolute_url(self):
         return reverse('order_detail', kwargs={'pk': self.pk})
 
 
-class OrderItem(models.Model):
+class OrderItem(models.Model): # товары в заказе
     order = models.ForeignKey(Orders, related_name='items', on_delete=models.CASCADE)
     product = models.ForeignKey(Products, related_name='order_items', on_delete=models.PROTECT)
     price = models.DecimalField(max_digits=10, decimal_places=2)
@@ -128,7 +142,7 @@ class OrderItem(models.Model):
     def __str__(self):
         return '{}'.format(self.id)
 
-    def get_cost(self):
+    def get_cost(self): # функция считает  цену товара умноженну. на кол-во товара в заказе
         return self.price * self.quantity
 
 

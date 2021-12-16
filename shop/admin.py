@@ -60,19 +60,25 @@ class OrderItemInline(admin.TabularInline):
     model = OrderItem
     raw_id_fields = ['product']
 
+
 class OrderItemAdmin(admin.ModelAdmin):
     model = OrderItem
-
 
 
 class OrdersAdmin(admin.ModelAdmin):
     list_display = ('id', 'status', 'ordered_at', 'delivered_at', 'payed', 'get_total_cost', 'order_completed')
     list_display_links = ('id',)
-    list_editable=('order_completed',)
+    list_editable = ('order_completed',)
     search_fields = ('product_name',)
     inlines = [OrderItemInline]
-    list_filter=('order_completed','payed')
+    list_filter = ('order_completed', 'payed')
 
+
+class TagAdmin(admin.ModelAdmin):
+    prepopulated_fields = {'slug': ('title',)}
+
+
+admin.site.register(Tag, TagAdmin)
 admin.site.register(Products, GoodsAdmin)
 admin.site.register(ContentFor, ContentForAdmin)
 admin.site.register(Orders, OrdersAdmin)

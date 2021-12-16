@@ -758,6 +758,11 @@ button:hover {
 
 }
 
+input[type="checkbox"]+label {
+    font-size: 0.85rem;
+    font-weight: 600
+}
+
 @media (max-width: 767px) {
 
 	.subscribe-form .main-content form input.button {

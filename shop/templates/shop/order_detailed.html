@@ -1,6 +1,6 @@
 {% extends "base.html" %}
 
-{% load order_item %}
+{% load special_tags %}
 {% block title %}Заказ номер: {{ order.id }} {% endblock %}
 {% load static %}
 
@@ -37,7 +37,7 @@
                         <div class="aside"><img src="{{ orderitem.product.photo.url }}" class="img-sm border"></div>
                         {% endif %}
                         <figcaption class="info align-self-center">
-                            <p class="dropdown-item"><b><a href="{{ orderitem.product.get_absolute_url }} "  style="color:#ff5400;">{{ orderitem.product.name }}</a></b><br>Кол-во:{{ orderitem.quantity }}<br><span class="text-muted">{{ orderitem.get_cost }} </span>
+                            <p class="dropdown-item"><b><a href="{{ orderitem.product.get_absolute_url }} "  style="color:#ff5400;">{{ orderitem.product.name }}</a></b><br>Кол-во:{{ orderitem.quantity }}<br><span class="text-muted">{{ orderitem.get_cost }}  &#x20bd </span>
                         </figcaption>
                     </figure>
                 </li>

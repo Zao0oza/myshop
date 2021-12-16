@@ -1,12 +1,11 @@
-from django.conf import settings
+
 from django.contrib.auth.forms import AuthenticationForm
 from django.core.mail import send_mail
 from django.shortcuts import render, redirect, get_object_or_404
-from django.http import HttpResponse
-from django.views import View
+from django.views.decorators.http import require_POST
+
 from django.views.generic import ListView, DetailView
-from django.db.models import F
-from django.db.models import Count
+
 
 from cart.cart import Cart
 from cart.forms import CartAddProductForm
@@ -99,13 +98,18 @@ class GetProduct(DetailView):
 
 
 def product_detail(request, slug):
+    form = CartAddProductForm()
     product = get_object_or_404(Products, slug=slug)
-    cart_product_form = CartAddProductForm()
-    product_tags_ids = Products.tags.values_list('id', flat=True)
-    similar_product = Products.objects.filter(tags__in=product_tags_ids).exclude(id=product.id)
-    similar_product = similar_product.annotate(same_tags=Count('tags')).order_by('-same_tags')[:4]
+    cart = Cart(request)
+    if request.method == "POST":
+        form = CartAddProductForm(request.POST, )
+        if form.is_valid():
+            cd = form.cleaned_data
+            cart.add(product=product,
+                     quantity=cd['quantity'],
+                     update_quantity=cd['update'])
     return render(request, 'shop/single-product.html',
-                  {'post': product, 'cart_product_form': cart_product_form, 'similar_posts': similar_product})
+                  {'post': product, 'form': form})
 
 
 def register_request(request):
@@ -114,9 +118,9 @@ def register_request(request):
         if form.is_valid():
             user = form.save()
             login(request, user)
-            messages.success(request, "Registration successful.")
+            messages.success(request, "Вы успешно зарегистрировались")
             return redirect("home")
-        messages.error(request, "Unsuccessful registration. Invalid information.")
+        messages.error(request, "Ошибка. Проверьте указанные данные")
     form = NewUserForm()
     return render(request=request, template_name="shop/register.html", context={"register_form": form})
 
@@ -134,19 +138,19 @@ def login_request(request):
             user = authenticate(username=username, password=password)
             if user is not None:
                 login(request, user)
-                messages.info(request, f"You are now logged in as {username}.")
+                messages.info(request, f"Добро пожаловать {username}.")
                 return redirect("home")
             else:
-                messages.error(request, "Invalid username or password.")
+                messages.error(request, "Неправильный пароль.")
         else:
-            messages.error(request, "Invalid username or password.")
+            messages.error(request, "Неправильное имя пользователя или пароль.")
     form = AuthenticationForm()
     return render(request=request, template_name="shop/login.html", context={"login_form": form})
 
 
 def logout_request(request):
     logout(request)
-    messages.info(request, "You have successfully logged out.")
+    messages.info(request, "Вы успешно вышли из аккаунта.")
     return redirect("home")
 
 

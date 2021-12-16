@@ -1,17 +1,11 @@
 
-<div class="featured-items">
+<div class="items">
     <div class="container">
         <div class="row">
             <div class="col-md-12">
-                <div class="section-heading">
-                    <div class="line-dec"></div>
-                    <h1>{% block title %}{% endblock %}</h1>
-                </div>
-            </div>
-            <div class="col-md-12">
-                <h2>Новинки</h2>
+                <h2>Похожие товары</h2>
                 <div class="owl-carousel owl-theme">
-                    {% for post in posts %}
+                    {% for post in products %}
                     <a href="{{ post.get_absolute_url }}">
                         <div class="featured-item">
                             {% if post.photo %}

@@ -1,5 +1,5 @@
 {% extends "base.html" %}
-{% load order_item %}
+{% load special_tags %}
 {% block title %}Ваши заказы{% endblock %}
 {% load static %}
 {% block content %}
@@ -7,7 +7,7 @@
 <link rel="stylesheet" href="{% static 'assets/css/user_orders.css' %}">
 
 
-
+{% if orders %}
 <div class="container">
     <div class="row">
         <section class="content">
@@ -24,7 +24,6 @@
                                     <div class="orders-list">
                                         <div class="container mt-5">
                                             <table class="table table-borderless main">
-                                                {% if orders %}
                                                 {% for order in orders %}
                                                 {% show_orderitem order.id as orderitems  %}
                                                 {% if order.order_completed is True %}
@@ -68,8 +67,7 @@
                                                 </tr>
                                                 {% endif %}
                                                 {% endfor %}
-                                                {% else %}
-                                                {% endif %}
+
                                                 </tbody>
                                             </table>
                                         </div>
@@ -84,7 +82,25 @@
         </section>
     </div>
 </div>
+{% else %}
 
+<h1> </h1>
+<div class="banner">
+    <div class="container">
+        <div class="row">
+            <div class="col-md-12">
+                <div class="caption">
+                    <h2>Упсс здесь ничего нет сделайте ваш заказ</h2>
+
+                    <div class="main-button">
+                        <a href="{% url 'products' %}">К покупкам</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endif %}
 <script src="{% static 'vendor/bootstrap/js/bootstrap.bundle.min.js' %}"></script>
 
 {% endblock %}
