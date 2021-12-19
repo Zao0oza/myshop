@@ -2,7 +2,6 @@
 {% block title %} {{ title }} :: {{ block.super }} {% endblock %}
 {% load static %}
 {% block content %}
-<link rel="stylesheet" href="{% static 'assets/css/order_create.css' %}">
 {% load special_tags %}
 
 <div class="single-product">
@@ -72,14 +71,14 @@
 
                     <form  method="post" class="order-form">
                          <div class="form-group">
-                            {{ form.non_field_errors }}
-                            <label  class="text-muted">{{ form.quantity.label_tag }}</label> {{ form.quantity }}</div>
+                            <label  class="text-muted">{{ form.quantity.label_tag }}</label> {{ form.quantity }}<span class="label label-warning">{{ form.non_field_errors }}</span></div>
                             {% csrf_token %}
                             <input type="hidden" name="amount" value="{{ post.amount }}"
                                    class="field-amount" id="id_amount">
                             <button type="submit" class="button">В корзину</button>
                     </form></div>
                     <div class="share">
+                        <br>
                         <h6>Поделиться: <span><a href="#"><i class="fa fa-facebook"></i></a><a href="#"><i class="fa fa-linkedin"></i></a><a href="#"><i class="fa fa-twitter"></i></a></span></h6>
                     </div>
 

@@ -27,23 +27,25 @@
     <div class="product">
         <div class="product-image">
             {% if product.photo %}
-            <img src="{{ product.photo.url }}">
+            <a href="{{ product.get_absolute_url }}">
+            <img src="{{ product.photo.url }}"></a>
             {% endif %}
         </div>
         <div class="product-details">
-            <div class="product-title">{{ product.name }}</div>
+            <div class="product-title"><h3 ><a href="{{ product.get_absolute_url }}" style="color: black">{{ product.name }} </a></h3></div>
         </div>
         <div class="product-price">{{ item.price }}</div>
         <form action="{% url 'cart:cart_add' product.id %}" method="post">
         <div class="product-quantity" id="{{ product.id }}">
-
             {{ item.update_quantity_form.quantity }}
+            <label >Имеется: {{ product.amount }}</label>
             {{ item.update_quantity_form.update }}
+            <input type="hidden" name="amount" value="{{ product.amount }}"
+                                   class="field-amount" id="id_amount">
             <input type="submit" id=button style="display: none;">
             {% csrf_token %}
-          </form>
-
         </div>
+        </form>
         <div class="product-removal">
             <a href="{% url 'cart:cart_remove' product.id %}">
             <button  class="remove-product" >

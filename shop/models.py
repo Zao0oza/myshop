@@ -36,6 +36,7 @@ class Products(models.Model): # класс описывающий товар
     price = MoneyField(default=0, max_digits=14, decimal_places=0, default_currency='RUB', verbose_name='Цена',
                        validators=[MinMoneyValidator(0), ])
     tags = models.ManyToManyField(Tag, blank=True, related_name='products')
+    is_published=models.BooleanField(default=1, verbose_name='Опубликован')
 
     def __str__(self):
         return self.name

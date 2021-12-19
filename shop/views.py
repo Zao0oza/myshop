@@ -20,39 +20,20 @@ def about(request):
     return render(request, 'shop/about.html')
 
 
-class ContactPage(DetailView):
-    model = ContentFor
-    template_name = 'shop/about.html'
-    context_object_name = 'сontentfor'
-
-    def get_context_data(self, *, object_list=None, **kwargs):
-        context = super().get_context_data(**kwargs)
-        context['title'] = 'ОБО МНЕ'
-        return context
-
-
-class ProductsPage(ListView):
+class ProductsPage(ListView):# класс отвечающий за страницу отображающие все товары
     model = Products
     template_name = 'shop/products.html'
     context_object_name = 'posts'
     paginate_by = 6
 
-    def get_queryset(self, **kwargs):
-        queryset = super().get_queryset(**kwargs)
+    def get_queryset(self, **kwargs):# отвечает за фильтрации товаров по цене и дате добавления, принимает название кнопки методом get и сортирует исходя из него
+        queryset = super().get_queryset(**kwargs).filter(is_published=True)
         if self.request.method == 'GET':
-            if 'low' in self.request.GET:
-                return queryset.order_by('price')
-            elif 'high' in self.request.GET:
-                return queryset.order_by('-price')
-            elif 'new' in self.request.GET:
-                return queryset.order_by('-created_at')
-            elif 'all' in self.request.GET:
-                return queryset
-            else:
+            try:
+                return queryset.order_by(list(self.request.GET.items())[1][0])# сортирует по названию кнопки !!! Исключение ошибки длины списка когда страница тольк прогрузилась
+            except:
                 return queryset
 
-        else:
-            return queryset
 
 
 class RecentProducts(ListView):
@@ -108,6 +89,7 @@ def product_detail(request, slug):
             cart.add(product=product,
                      quantity=cd['quantity'],
                      update_quantity=cd['update'])
+            return redirect('cart:cart_detail')
     return render(request, 'shop/single-product.html',
                   {'post': product, 'form': form})
 

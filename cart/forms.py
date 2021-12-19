@@ -14,9 +14,3 @@ class CartAddProductForm(forms.Form):
         amount = cleaned_data['amount']
         if quantity > amount:
             raise forms.ValidationError('недостаточно единиц товара в наличии')
-
-
-    def __init__(self, *args, **kwargs):
-        super(CartAddProductForm, self).__init__(*args, **kwargs)
-        for visible in self.visible_fields():
-            visible.field.widget.attrs['class'] = 'form-control'

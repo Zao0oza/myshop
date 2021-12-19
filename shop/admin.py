@@ -32,11 +32,12 @@ class GoodsAdmin(admin.ModelAdmin):
     save_on_top = True
     prepopulated_fields = {'slug': ('name',)}
     form = GoodsAdminForm
-    list_display = ('id', 'name', 'slug', 'price', 'amount', 'created_at', 'get_photo',)
-    list_display_links = ('id', 'name')
+    list_display = ('id', 'name', 'slug', 'price', 'amount', 'created_at', 'get_photo','is_published',)
+    list_display_links = ('id', 'name',)
     search_fields = ('name',)
     readonly_fields = ('created_at', 'get_photo')
     fields = ('name', 'slug', 'price', 'amount', 'tags', 'description', 'photo', 'get_photo', 'created_at')
+    list_editable = ('is_published',)
 
     def get_photo(self, obj):
         if obj.photo:

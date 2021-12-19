@@ -20,9 +20,9 @@
         <form action="" method="GET">
           <div id="filters" class="button-group">
             {% csrf_token %}
-            <button class="btn btn-primary"   name="new">Новинки</button>
-            <button class="btn btn-primary" name="low" >Цена минимум<i class='fas fa-angle-up'></i></button>
-            <button class="btn btn-primary" name="high">Цена максимум<i class='fas fa-angle-down'></i></button>
+            <button class="btn btn-primary"   name="-created_at">Новинки</button>
+            <button class="btn btn-primary" name="price" >Цена минимум<i class='fas fa-angle-up'></i></button>
+            <button class="btn btn-primary" name="-price">Цена максимум<i class='fas fa-angle-down'></i></button>
         </div></form>
       </div>
       </div>

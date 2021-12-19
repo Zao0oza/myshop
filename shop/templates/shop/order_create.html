@@ -4,11 +4,11 @@
 {% load static %}
 {% block content %}
 <link rel="stylesheet" href="{% static 'assets/css/order_create.css' %}">
-<h1>Подтвержедние зак</h1>
+<h1>Подтвержедние заказа</h1>
 <form action="." method="post" class="order-form">
     <nav class="bg-white">
         <div class="d-flex align-items-center">
-            <div class="ml-auto"> <a href="#" class="text-uppercase">Back to shopping</a> </div>
+            <div class="ml-auto"> <a href="{% url 'products' %}" class="text-uppercase">Назад к покупкам</a> </div>
         </div>
     </nav>
     <header>
@@ -85,17 +85,12 @@
                             <div class="font-weight-bold">{{ cart.get_total_delivery_price }} &#x20bd</div>
                         </div>
                     </div>
-                </div>
-                <div class="row pt-lg-3 pt-2 buttons mb-sm-0 mb-2">
-                    <div class="col-md-6">
-                        <form  action="{% url 'products' %}">
-                            <button class="button" >Продолжить покупки</button></form>
-                    </div>
-                    <div class="col-md-6 pt-md-0 pt-3">
-                        <button class="button" id="update">Оформить</button>
+                     <div class="col-md-6 pt-md-0 pt-3">
+                        <button class=" btn-lg btn-block" id="update">Оформить</button>
                         {% csrf_token %}
                     </div>
                 </div>
+
             </div>
         </div>
     </div>

@@ -26,7 +26,7 @@
                                             <table class="table table-borderless main">
                                                 {% for order in orders %}
                                                 {% show_orderitem order.id as orderitems  %}
-                                                {% if order.order_completed is True %}
+                                                {% if order.order_completed is False %}
                                                 <tbody>
                                                 <tr  data-status="active" class="rounded bg-white">
                                                     <td  class="order-color" ><a href="{{ order.get_absolute_url }}">{{ order.id }}</a></td>
@@ -47,6 +47,7 @@
                                                         {{ order.get_status_display}} </td>
                                                 </tr>
                                                 {% else %}
+                                                {% if order %}
                                                 <tr  data-status="completed" class="rounded bg-white">
                                                     <td  class="order-color" ><a href="{{ order.get_absolute_url }}">{{ order.id }}</a></td>
                                                     <td><b>Размещен:</b>
@@ -66,8 +67,8 @@
                                                         {{ order.get_status_display}} </td>
                                                 </tr>
                                                 {% endif %}
+                                                {% endif %}
                                                 {% endfor %}
-
                                                 </tbody>
                                             </table>
                                         </div>
@@ -91,7 +92,6 @@
             <div class="col-md-12">
                 <div class="caption">
                     <h2>Упсс здесь ничего нет сделайте ваш заказ</h2>
-
                     <div class="main-button">
                         <a href="{% url 'products' %}">К покупкам</a>
                     </div>

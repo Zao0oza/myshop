@@ -7,7 +7,6 @@ urlpatterns=[
     path('feedback/', feedback, name='feedback'),
     path('products/', ProductsPage.as_view(), name='products'),
     path('about/', about, name='about'),
-    path('contact/', ContactPage.as_view(), name='contact'),
     path('products/<str:slug>/', product_detail, name='product'),
     path("register", register_request, name="register"),
     path("login", login_request, name="login"),

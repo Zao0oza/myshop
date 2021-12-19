@@ -19,7 +19,6 @@
                     <div class="col"> <strong>Номер отслеживания:</strong> <br> {{ order.tracking_number|default_if_none:""  }} </div>
                     <div class="col"> <strong>Комментарий к заказу:</strong> <br>{{ order.comment|default_if_none:"" }} </div>
                 </div>
-
             </article>
             <div class="track">
                 <div class="step  active"> <span class="icon"> <i class="fa fa-check"></i> </span> <span class="text">Заказ в обработке</span> </div>
@@ -34,7 +33,7 @@
                 <li class="col-md-4">
                     <figure class="itemside mb-3">
                         {% if orderitem.product.photo %}
-                        <div class="aside"><img src="{{ orderitem.product.photo.url }}" class="img-sm border"></div>
+                        <div class="aside"><a href="{{ orderitem.product.get_absolute_url }}"><img src="{{ orderitem.product.photo.url }}" class="img-sm border"></a></div>
                         {% endif %}
                         <figcaption class="info align-self-center">
                             <p class="dropdown-item"><b><a href="{{ orderitem.product.get_absolute_url }} "  style="color:#ff5400;">{{ orderitem.product.name }}</a></b><br>Кол-во:{{ orderitem.quantity }}<br><span class="text-muted">{{ orderitem.get_cost }}  &#x20bd </span>
