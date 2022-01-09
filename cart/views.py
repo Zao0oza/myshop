@@ -6,7 +6,7 @@ from .forms import CartAddProductForm
 
 
 @require_POST
-def cart_add(request, product_id):
+def cart_add(request, product_id):  # добавляет товары в объект корзина
     cart = Cart(request)
     product = get_object_or_404(Products, id=product_id)
     form = CartAddProductForm(request.POST, initial={'quantity': 1})
@@ -18,14 +18,14 @@ def cart_add(request, product_id):
     return redirect('cart:cart_detail')
 
 
-def cart_remove(request, product_id):
+def cart_remove(request, product_id):  # удаляет товары из корзины
     cart = Cart(request)
     product = get_object_or_404(Products, id=product_id)
     cart.remove(product)
     return redirect('cart:cart_detail')
 
 
-def cart_detail(request):
+def cart_detail(request):  # вывод товаров из корзины на страницу
     cart = Cart(request)
     form=CartAddProductForm()
     for item in cart:

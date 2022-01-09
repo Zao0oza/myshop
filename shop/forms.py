@@ -8,28 +8,29 @@ from django.contrib.auth.models import User
 from .models import Orders
 
 
-class OrderCreateForm(forms.ModelForm):
+class OrderCreateForm(forms.ModelForm):  # форма заказа
     class Meta:
         model = Orders
         fields = ['first_name', 'last_name', 'email', 'address', 'zip_code', 'city', 'phone_number', 'user']
         widgets = {
-            'user': forms.HiddenInput(),
+            'user': forms.HiddenInput(),  # используется для того чтобы если пользователь авторизован сохранять его имя
+            # в заказе
         }
 
-    def __init__(self, *args, **kwargs):
+    def __init__(self, *args, **kwargs):  # добавляет всем полям виджета класс для взаимодействия с css
         super(OrderCreateForm, self).__init__(*args, **kwargs)
         for field in self:
             field.field.widget.attrs['class'] = "form-control"
 
 
-class ContactForm(forms.Form):
+class ContactForm(forms.Form):  # форма обратной связи
     subject = forms.CharField(label='Тема', widget=forms.TextInput(attrs={'class': 'form-control'}))
     email = forms.EmailField(label='Email', widget=forms.TextInput(attrs={'class': 'form-control'}))
     content = forms.CharField(label='Текст', widget=forms.Textarea(attrs={'class': 'form-control', 'rows': 5}))
     captcha = CaptchaField()
 
 
-class NewUserForm(UserCreationForm):
+class NewUserForm(UserCreationForm):# форма регистрации поллзователя
     email = forms.EmailField(required=True)
 
     class Meta:

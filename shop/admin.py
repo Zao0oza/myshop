@@ -17,14 +17,6 @@ class GoodsAdminForm(forms.ModelForm):
         fields = '__all__'
 
 
-class ContentForAdminForm(forms.ModelForm):
-    content = forms.CharField(widget=CKEditorUploadingWidget())
-
-    class Meta:
-        model = ContentFor
-        fields = '__all__'
-
-
 class GoodsAdmin(admin.ModelAdmin):
     inlines = [
         ImageInline,
@@ -32,7 +24,7 @@ class GoodsAdmin(admin.ModelAdmin):
     save_on_top = True
     prepopulated_fields = {'slug': ('name',)}
     form = GoodsAdminForm
-    list_display = ('id', 'name', 'slug', 'price', 'amount', 'created_at', 'get_photo','is_published',)
+    list_display = ('id', 'name', 'slug', 'price', 'amount', 'created_at', 'get_photo', 'is_published',)
     list_display_links = ('id', 'name',)
     search_fields = ('name',)
     readonly_fields = ('created_at', 'get_photo')
@@ -45,16 +37,6 @@ class GoodsAdmin(admin.ModelAdmin):
         return '-'
 
     get_photo.short_description = 'фото'
-
-
-class ContentForAdmin(admin.ModelAdmin):
-    form = ContentForAdminForm
-    save_on_top = True
-    prepopulated_fields = {'slug': ('title',)}
-    list_display = ('id', 'title', 'slug',)
-    list_display_links = ('id', 'title')
-    search_fields = ('title',)
-    fields = ('title', 'slug', 'content')
 
 
 class OrderItemInline(admin.TabularInline):
@@ -81,6 +63,5 @@ class TagAdmin(admin.ModelAdmin):
 
 admin.site.register(Tag, TagAdmin)
 admin.site.register(Products, GoodsAdmin)
-admin.site.register(ContentFor, ContentForAdmin)
 admin.site.register(Orders, OrdersAdmin)
 admin.site.register(OrderItem, OrderItemAdmin)

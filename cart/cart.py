@@ -6,9 +6,7 @@ from shop.models import Products
 class Cart(object):
 
     def __init__(self, request):
-        '''
-        Инициализация корзины
-        '''
+        #  Инициализация корзины
         self.session = request.session
         cart = self.session.get('cart')
         if not cart:
@@ -17,9 +15,8 @@ class Cart(object):
         self.cart = cart
 
     def __iter__(self):
-        """
-        Перебираем товары в корзине и получаем товары из базы данных.
-        """
+
+        #  Перебираем товары в корзине и получаем товары из базы данных.
         product_ids = self.cart.keys()
         # получаем товары и добавляем их в корзину
         products = Products.objects.filter(id__in=product_ids)
@@ -33,9 +30,7 @@ class Cart(object):
             yield item
 
     def __len__(self):
-        """
-        Считаем сколько товаров в корзине
-        """
+        #  Считаем сколько товаров в корзине
         return sum(item['quantity'] for item in self.cart.values())
 
     def update(self, product, quantity=1):
@@ -44,9 +39,7 @@ class Cart(object):
         self.save()
 
     def add(self, product, quantity=1, update_quantity=False):
-        """
-        Добавляем товар в корзину или обновляем его количество.
-        """
+        # Добавляем товар в корзину или обновляем его количество.
         product_id = str(product.id)
         if product_id not in self.cart:
             self.cart[product_id] = {'quantity': 0,
@@ -62,9 +55,7 @@ class Cart(object):
         self.session.modified = True
 
     def remove(self, product):
-        """
-        Удаляем товар
-        """
+        # Удаляем товар
         product_id = str(product.id)
         if product_id in self.cart:
             del self.cart[product_id]
