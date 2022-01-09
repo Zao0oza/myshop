@@ -11,23 +11,22 @@ https://docs.djangoproject.com/en/3.1/ref/settings/
 """
 from os import path
 from pathlib import Path
+import KEYS
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
-
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/3.1/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'f0n309rtdj3c-d%9spnvstpv0=rp_-0l&s!jvf58=@5+xyn+)r'
-
+SECRET_KEY = KEYS.SECRET_KEY
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
 ALLOWED_HOSTS = []
-CART_SESSION_ID='cart'
+CART_SESSION_ID = 'cart'
 
 # Application definition
 
@@ -50,8 +49,6 @@ INSTALLED_APPS = [
     'django.forms',
     'debug_toolbar',
     'sorl.thumbnail',
-
-
 
 ]
 
@@ -88,7 +85,6 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'myshop.wsgi.application'
 
-
 # Database
 # https://docs.djangoproject.com/en/3.1/ref/settings/#databases
 
@@ -98,7 +94,6 @@ DATABASES = {
         'NAME': BASE_DIR / 'db.sqlite3',
     }
 }
-
 
 # Password validation
 # https://docs.djangoproject.com/en/3.1/ref/settings/#auth-password-validators
@@ -118,7 +113,6 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 
-
 # Internationalization
 # https://docs.djangoproject.com/en/3.1/topics/i18n/
 
@@ -132,7 +126,6 @@ USE_L10N = True
 
 USE_TZ = True
 
-
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/3.1/howto/static-files/
 STATIC_URL = '/static/'
@@ -141,12 +134,11 @@ STATICFILES_DIRS = [
     path.join(BASE_DIR, 'myshop/static')]
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
-MEDIA_ROOT=path.join(BASE_DIR, 'media')
-MEDIA_URL= '/media/'
-INTERNAL_IPS = ['127.0.0.1',]
+MEDIA_ROOT = path.join(BASE_DIR, 'media')
+MEDIA_URL = '/media/'
+INTERNAL_IPS = ['127.0.0.1', ]
 
 CKEDITOR_UPLOAD_PATH = "uploads/"
-
 
 CKEDITOR_CONFIGS = {
     'default': {
@@ -195,7 +187,7 @@ CKEDITOR_CONFIGS = {
         # 'mathJaxLib': '//cdn.mathjax.org/mathjax/2.2-latest/MathJax.js?config=TeX-AMS_HTML',
         'tabSpaces': 4,
         'extraPlugins': ','.join([
-            'uploadimage', # the upload image feature
+            'uploadimage',  # the upload image feature
             # your extra plugins here
             'div',
             'autolink',
@@ -214,8 +206,8 @@ CKEDITOR_CONFIGS = {
 }
 
 EMAIL_HOST = 'smtp.yandex.ru'
-EMAIL_HOST_USER ='danfeigin'
-EMAIL_HOST_PASSWORD = '516983Django'
+EMAIL_HOST_USER = KEYS.EMAIL_HOST_USER
+EMAIL_HOST_PASSWORD = KEYS.EMAIL_HOST_PASSWORD
 EMAIL_PORT = 465
 EMAIL_USE_TLS = False
 EMAIL_USE_SSL = True
